@@ -1,3 +1,7 @@
 # Quasar App
 
-> WIP
+Deploy to Github Pages:
+
+`quasar build`
+
+`git subtree push --prefix dist origin gh-pages`
