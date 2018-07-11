@@ -1,5 +1,6 @@
 <template>
 <div>
+  <div>Rank: {{ tree['Rank'] | ordinal }}</div>
   <div v-for="(key, index) in keys" :key="index">
     {{ key }}:
     {{ tree[key] }}
@@ -12,7 +13,7 @@
   </div>
   <div v-else>No location provided</div>
   <Diagram
-    :dbh="tree['DBH (in)']"
+    :dbh="dbh"
     :height="tree['HEIGHT(ft)']"
     :spread="tree['SPREAD (ft)']"
     :points="tree['Points']" />
@@ -21,6 +22,7 @@
 
 <script>
 import keys from 'lodash/keys';
+import round from 'lodash/round';
 import { openURL } from 'quasar';
 import { mapGetters } from 'vuex';
 
@@ -42,6 +44,9 @@ export default {
     ...mapGetters([
       'getTree'
     ]),
+    dbh() {
+      return round(Number(this.tree['CIR (in)']) / Math.PI, 1);
+    },
     keys() {
       return keys(this.tree);
     }
