@@ -5,8 +5,6 @@
     {{ tree[key] }}
   </div>
   <div v-if="tree.Latitude && tree.Longitude">
-    <div>Latitude: {{ tree.Latitude }}</div>
-    <div>Longitude: {{ tree.Longitude }}</div>
     <q-btn
       @click.native="viewTreeInGoogleMaps(tree)"
       label="View map"
@@ -54,7 +52,6 @@ export default {
     }
   },
   beforeMount() {
-    // TODO: need to make sure the trees are loaded first
     this.tree = this.getTree(this.$route.params.id);
   }
 };

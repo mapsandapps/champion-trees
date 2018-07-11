@@ -8,13 +8,12 @@ export default [
         path: '',
         component: () => import('pages/List')
       },
+      {
+        path: '/trees/:id',
+        component: () => import('pages/Details')
+      }
     ]
   },
-  {
-    path: '/trees/:id',
-    component: () => import('pages/Details')
-  },
-
   { // Always leave this as last one
     path: '*',
     component: () => import('pages/404')

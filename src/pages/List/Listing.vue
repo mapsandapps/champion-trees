@@ -33,18 +33,6 @@ export default {
     sortedTrees() {
       return orderBy(this.getTrees, ['distanceMiles'], ['asc']);
     }
-  },
-  methods: {
-    ...mapActions([
-      'fetchTreeData',
-      'findUserLocation'
-    ])
-  },
-  mounted() {
-    this.fetchTreeData()
-      .then(() => {
-        this.findUserLocation();
-      });
   }
 }
 </script>

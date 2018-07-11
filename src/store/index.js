@@ -26,7 +26,6 @@ const store = new Vuex.Store({
     findUserLocation({ commit, dispatch }) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
-          console.log(position);
           commit('setCoordinates', position.coords);
           dispatch('setTreeDistances');
         });
@@ -52,7 +51,6 @@ const store = new Vuex.Store({
             distanceHuman
           };
           commit('setTreeDistance', details);
-          console.log(distanceMiles);
         }
       });
     }
@@ -95,6 +93,7 @@ const store = new Vuex.Store({
     },
     setTreeData(state) {
       state.trees = tabletop.sheets('trees').elements;
+      state.treeDataLoaded = true;
     },
     setTreeDistance(state, details) {
       const { index, distanceMiles, distanceHuman } = details;
@@ -105,6 +104,7 @@ const store = new Vuex.Store({
   state: {
     latitude: null,
     longitude: null,
+    treeDataLoaded: false,
     trees: []
   }
 })

@@ -6,15 +6,6 @@
         :glossy="$q.theme === 'mat'"
         :inverted="$q.theme === 'ios'"
       >
-        <!-- <q-btn
-          flat
-          dense
-          round
-          @click="leftDrawerOpen = !leftDrawerOpen"
-          aria-label="Menu"
-        >
-          <q-icon name="menu" />
-        </q-btn> -->
 
         <q-toolbar-title>
           Quasar App
@@ -23,57 +14,52 @@
       </q-toolbar>
     </q-layout-header>
 
-    <!-- <q-layout-drawer
-      v-model="leftDrawerOpen"
-      :content-class="$q.theme === 'mat' ? 'bg-grey-2' : null"
-    >
-      <q-list
-        no-border
-        link
-        inset-delimiter
-      >
-        <q-list-header>Essential Links</q-list-header>
-        <q-item @click.native="openURL('http://quasar-framework.org')">
-          <q-item-side icon="school" />
-          <q-item-main label="Docs" sublabel="quasar-framework.org" />
-        </q-item>
-        <q-item @click.native="openURL('https://github.com/quasarframework/')">
-          <q-item-side icon="code" />
-          <q-item-main label="GitHub" sublabel="github.com/quasarframework" />
-        </q-item>
-        <q-item @click.native="openURL('https://discord.gg/5TDhbDg')">
-          <q-item-side icon="chat" />
-          <q-item-main label="Discord Chat Channel" sublabel="https://discord.gg/5TDhbDg" />
-        </q-item>
-        <q-item @click.native="openURL('http://forum.quasar-framework.org')">
-          <q-item-side icon="record_voice_over" />
-          <q-item-main label="Forum" sublabel="forum.quasar-framework.org" />
-        </q-item>
-        <q-item @click.native="openURL('https://twitter.com/quasarframework')">
-          <q-item-side icon="rss feed" />
-          <q-item-main label="Twitter" sublabel="@quasarframework" />
-        </q-item>
-      </q-list>
-    </q-layout-drawer> -->
-
     <q-page-container>
-      <router-view />
+      <router-view
+        v-if="treeDataLoaded" />
     </q-page-container>
   </q-layout>
 </template>
 
 <script>
-import { openURL } from 'quasar'
+import { Loading } from 'quasar';
+import { mapActions, mapState } from 'vuex';
 
 export default {
   name: 'LayoutDefault',
+  components: {
+    Loading
+  },
   data () {
     return {
-      leftDrawerOpen: this.$q.platform.is.desktop
     }
   },
+  computed: {
+    ...mapState([
+      'treeDataLoaded'
+    ])
+  },
   methods: {
-    openURL
+    ...mapActions([
+      'fetchTreeData',
+      'findUserLocation'
+    ])
+  },
+  watch: {
+    treeDataLoaded() {
+      if (this.treeDataLoaded) {
+        Loading.hide();
+      }
+    }
+  },
+  mounted() {
+    Loading.show({
+      message: 'Loading trees...'
+    });
+    this.fetchTreeData()
+      .then(() => {
+        this.findUserLocation();
+      });
   }
 }
 </script>
