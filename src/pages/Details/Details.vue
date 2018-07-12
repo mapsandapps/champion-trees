@@ -1,10 +1,6 @@
 <template>
-<div>
-  <div>Rank: {{ tree['Rank'] | ordinal }}</div>
-  <div v-for="(key, index) in keys" :key="index">
-    {{ key }}:
-    {{ tree[key] }}
-  </div>
+<div class="q-pa-md">
+  <div>{{ tree['Rank'] | ordinal }} largest {{ tree['COMMON NAME'] }} in Atlanta</div>
   <div v-if="tree.Latitude && tree.Longitude">
     <q-btn
       @click.native="viewTreeInGoogleMaps(tree)"
@@ -12,6 +8,14 @@
       color="primary" />
   </div>
   <div v-else>No location provided</div>
+
+  <h4>Kitchen Sink</h4>
+  <div class="kitchen-sink">
+    <div v-for="(key, index) in keys" :key="index">
+      {{ key }}:
+      {{ tree[key] }}
+    </div>
+  </div>
   <Diagram
     :dbh="dbh"
     :height="tree['HEIGHT(ft)']"
@@ -63,4 +67,7 @@ export default {
 </script>
 
 <style>
+.kitchen-sink {
+  color: gray;
+}
 </style>

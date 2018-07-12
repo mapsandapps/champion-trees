@@ -1,5 +1,5 @@
 <template>
-<div>
+<div id="item">
   <q-item-main
     :label="tree['COMMON NAME']"
     label-lines="1"
@@ -35,4 +35,7 @@ export default {
 </script>
 
 <style scoped>
+#item {
+  width: 100%;
+}
 </style>

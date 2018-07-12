@@ -1,19 +1,5 @@
 <template>
   <q-layout view="lHh Lpr lFf">
-    <q-layout-header>
-      <q-toolbar
-        color="primary"
-        :glossy="$q.theme === 'mat'"
-        :inverted="$q.theme === 'ios'"
-      >
-
-        <q-toolbar-title>
-          Quasar App
-          <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
-        </q-toolbar-title>
-      </q-toolbar>
-    </q-layout-header>
-
     <q-page-container>
       <router-view
         v-if="treeDataLoaded" />
@@ -22,8 +8,10 @@
 </template>
 
 <script>
-import { Loading } from 'quasar';
+import { Loading, colors } from 'quasar';
 import { mapActions, mapState } from 'vuex';
+
+colors.setBrand('primary', '#ffc107');
 
 export default {
   name: 'LayoutDefault',
