@@ -33,7 +33,8 @@ module.exports = function (ctx) {
         //   externals: ['tls', 'net', 'fs']
         // });
         cfg.externals = ['tls', 'net', 'fs'];
-      }
+      },
+      publicPath: '/champion-trees'
     },
     devServer: {
       // https: true,

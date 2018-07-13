@@ -2,10 +2,12 @@
 
 Deploy to Github Pages:
 
-`quasar build`
 
-`git add dist`
-
-`git commit -m "Message"`
-
-`git subtree push --prefix dist/spa-mat origin gh-pages`
+```
+quasar build
+cd dist/spa-mat
+git add --all
+git commit -m "Deploy to gh-pages"
+git push origin gh-pages
+cd ../../
+```
