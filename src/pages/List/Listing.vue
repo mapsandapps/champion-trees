@@ -25,7 +25,7 @@
         <Item :tree="tree" />
       </q-item>
     </q-list>
-    <div v-else>Map goes here</div>
+    <Map :trees="sortedTrees" />
   </q-page>
 </div>
 </template>
@@ -37,11 +37,13 @@ import { mapActions, mapGetters } from 'vuex';
 import orderBy from 'lodash/orderBy';
 
 import Item from './Item';
+import Map from './Map';
 
 export default {
   name: 'Listing',
   components: {
-    Item
+    Item,
+    Map
   },
   data() {
     return {
