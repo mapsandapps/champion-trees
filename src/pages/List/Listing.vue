@@ -4,17 +4,12 @@
     <q-toolbar
       color="primary"
     >
-
       <q-btn-toggle
         v-model="mode"
         toggle-color="blue"
         rounded
         text-color="black"
         :options="[{ label: 'List', value: 'list' }, { label: 'Map', value: 'map' }]" />
-      <!-- <q-toolbar-title>
-        Quasar App
-        <div slot="subtitle">Running on Quasar v{{ $q.version }}</div>
-      </q-toolbar-title> -->
     </q-toolbar>
   </q-layout-header>
   <q-page padding id="listing" class="justify-center">
@@ -32,7 +27,7 @@
 
 <script>
 import { store } from '../../store';
-import { mapActions, mapGetters } from 'vuex';
+import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import orderBy from 'lodash/orderBy';
 
@@ -47,16 +42,36 @@ export default {
   },
   data() {
     return {
-      mode: 'list'
     }
   },
   computed: {
     ...mapGetters([
       'getTrees'
     ]),
+    ...mapState([
+      'currentListingView'
+    ]),
+    mode: {
+      get() {
+        return this.currentListingView;
+      },
+      set() {
+        // return this.$store.commit('cases/evidence/clearDeleteToast');
+        if (this.currentListingView === 'list') {
+          this.setCurrentListingView('map');
+        } else {
+          this.setCurrentListingView('list');
+        }
+      }
+    },
     sortedTrees() {
       return orderBy(this.getTrees, ['distanceMiles'], ['asc']);
     }
+  },
+  methods: {
+    ...mapMutations([
+      'setCurrentListingView'
+    ])
   }
 }
 </script>

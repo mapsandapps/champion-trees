@@ -1,6 +1,7 @@
 <template>
 <div class="q-pa-md">
   <div>{{ tree['Rank'] | ordinal }} largest {{ tree['COMMON NAME'] }} in Atlanta</div>
+  <div>At {{ tree['LOCATION'] }}</div>
   <div v-if="tree.Latitude && tree.Longitude">
     <q-btn
       @click.native="viewTreeInGoogleMaps(tree)"

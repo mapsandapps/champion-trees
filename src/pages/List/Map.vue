@@ -1,8 +1,19 @@
 <template>
-  <div id="map" ref="map" />
+  <div>
+    <div id="map" ref="map" />
+    <div v-if="selectedTreeData">
+      {{ selectedTreeData['COMMON NAME'] }}<br>
+      {{ selectedTreeData['LOCATION'] }}<br>
+      <q-btn
+        @click="navigateToDetails"
+        label="View details"
+        color="primary" />
+    </div>
+  </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -24,10 +35,25 @@ export default {
     }
   },
   data() {
+    return {
+      selectedTreeData: null
+    };
   },
   computed: {
+    ...mapGetters([
+      'getTree'
+    ])
   },
   methods: {
+    navigateToDetails() {
+      this.$router.push({
+        name: 'Details',
+        params: { id: this.selectedTreeData.ID }
+      });
+    },
+    onClick(data) {
+      this.selectedTreeData = this.getTree(data.target.id);
+    }
   },
   mounted() {
     const map = new L.Map(this.$refs.map).setView([0, 0], 4);
@@ -43,7 +69,8 @@ export default {
       let marker = L.marker({
         lat: tree.Latitude,
         lon: tree.Longitude
-      }).addTo(map);
+      }).on('click', this.onClick).addTo(map);
+      marker.id = tree.ID;
       markers.push(marker);
     });
 

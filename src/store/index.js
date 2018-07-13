@@ -91,6 +91,9 @@ const store = new Vuex.Store({
       state.latitude = coordinates.latitude;
       state.longitude = coordinates.longitude;
     },
+    setCurrentListingView(state, view) {
+      state.currentListingView = view;
+    },
     setTreeData(state) {
       state.trees = tabletop.sheets('trees').elements;
       state.treeDataLoaded = true;
@@ -102,6 +105,7 @@ const store = new Vuex.Store({
     }
   },
   state: {
+    currentListingView: 'list',
     latitude: null,
     longitude: null,
     treeDataLoaded: false,

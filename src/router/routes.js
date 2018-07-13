@@ -10,6 +10,7 @@ export default [
       },
       {
         path: '/trees/:id',
+        name: 'Details',
         component: () => import('pages/Details')
       }
     ]
