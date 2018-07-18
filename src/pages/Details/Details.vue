@@ -7,10 +7,6 @@
       @click="navigateToNavigate"
       label="Navigate to Tree"
       color="primary" />
-    <q-btn
-      @click.native="viewTreeInGoogleMaps(tree)"
-      label="View in Google Maps"
-      color="primary" />
   </div>
   <div v-else>No location provided</div>
 
@@ -32,7 +28,6 @@
 <script>
 import keys from 'lodash/keys';
 import round from 'lodash/round';
-import { openURL } from 'quasar';
 import { mapGetters } from 'vuex';
 
 import Diagram from 'components/diagram';
@@ -66,9 +61,6 @@ export default {
         name: 'Navigate',
         params: { id: this.tree.ID }
       });
-    },
-    viewTreeInGoogleMaps(tree) {
-      openURL(`https://www.google.com/maps/search/${tree.Latitude},+${tree.Longitude}/`);
     }
   },
   mounted() {

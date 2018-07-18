@@ -12,6 +12,8 @@ import { Loading, colors } from 'quasar';
 import { mapActions, mapState } from 'vuex';
 
 colors.setBrand('primary', '#ffc107');
+colors.setBrand('secondary', '#047be3');
+colors.setBrand('warning', '#db2828');
 
 export default {
   name: 'LayoutDefault',

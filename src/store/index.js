@@ -16,6 +16,13 @@ function degreesToRadians(degrees) {
 var tabletop;
 
 const store = new Vuex.Store({
+  state: {
+    currentListingView: 'list',
+    latitude: null,
+    longitude: null,
+    treeDataLoaded: false,
+    trees: []
+  },
   actions: {
     fetchTreeData({ commit }) {
       tabletop = Tabletop.init({
@@ -100,13 +107,6 @@ const store = new Vuex.Store({
       Vue.set(state.trees[index], 'distanceHuman', distanceHuman);
       Vue.set(state.trees[index], 'bearing', bearing);
     }
-  },
-  state: {
-    currentListingView: 'list',
-    latitude: null,
-    longitude: null,
-    treeDataLoaded: false,
-    trees: []
   }
 })
 
