@@ -2,21 +2,25 @@
 <div v-if="tree" class="q-pa-md">
   <div>{{ tree['Rank'] | ordinal }} largest {{ tree['COMMON NAME'] }} in Atlanta</div>
   <div>At {{ tree['LOCATION'] }}</div>
+  <div>{{ tree.Points }} points</div>
   <div v-if="tree.Latitude && tree.Longitude">
     <q-btn
+      class="q-my-md"
       @click="navigateToNavigate"
       label="Navigate to Tree"
       color="primary" />
   </div>
   <div v-else>No location provided</div>
 
-  <h4>Kitchen Sink</h4>
-  <div class="kitchen-sink">
-    <div v-for="(key, index) in keys" :key="index">
-      {{ key }}:
-      {{ tree[key] }}
-    </div>
-  </div>
+  <q-card class="q-ma-sm kitchen-sink">
+    <q-card-title>Kitchen Sink</q-card-title>
+    <q-card-main>
+      <div v-for="(key, index) in keys" :key="index">
+        {{ key }}:
+        {{ tree[key] }}
+      </div>
+    </q-card-main>
+  </q-card>
   <Diagram
     :dbh="dbh"
     :height="tree['HEIGHT(ft)']"
@@ -69,8 +73,9 @@ export default {
 };
 </script>
 
-<style>
+<style lang="scss" scoped>
 .kitchen-sink {
   color: gray;
+  margin-top: 160px;
 }
 </style>
