@@ -20,7 +20,7 @@
         <Item :tree="tree" />
       </q-item>
     </q-list>
-    <Map :trees="sortedTrees" />
+    <Map v-else :trees="sortedTrees" />
   </q-page>
 </div>
 </template>
@@ -56,7 +56,6 @@ export default {
         return this.currentListingView;
       },
       set() {
-        // return this.$store.commit('cases/evidence/clearDeleteToast');
         if (this.currentListingView === 'list') {
           this.setCurrentListingView('map');
         } else {

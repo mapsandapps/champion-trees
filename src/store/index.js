@@ -4,6 +4,8 @@ import Tabletop from 'tabletop';
 
 import find from 'lodash/find';
 import floor from 'lodash/floor';
+import bearing from '@turf/bearing';
+import distance from '@turf/distance';
 
 Vue.use(Vuex)
 
@@ -36,7 +38,7 @@ const store = new Vuex.Store({
     setTreeDistances({ state, commit, getters }) {
       state.trees.forEach((tree, index) => {
         if (tree.Latitude && tree.Longitude) {
-          const distanceMiles = getters.distanceFromUser(tree.Latitude, tree.Longitude);
+          const distanceMiles = getters.distanceFromUser(tree);
           var distanceHuman;
           // TODO: convert this to a filter
           if (distanceMiles >= 1) {
@@ -45,10 +47,12 @@ const store = new Vuex.Store({
           } else {
             distanceHuman = `${Math.floor(distanceMiles * 1760)} yards`;
           }
+          const bearing = getters.bearingFromUser(tree);
           const details = {
             index,
             distanceMiles,
-            distanceHuman
+            distanceHuman,
+            bearing
           };
           commit('setTreeDistance', details);
         }
@@ -56,27 +60,19 @@ const store = new Vuex.Store({
     }
   },
   getters: {
-    distanceFromUser: state => (lat1, lon1) => {
-      // distance in miles between earth coordinates
-      if (!state.latitude || ! state.longitude) return null;
-
-      lat1 = Number(lat1);
-      lon1 = Number(lon1);
-
-      var lat2 = state.latitude;
-      var lon2 = state.longitude;
-      var earthRadiusMiles = 3959;
-
-      var dLat = degreesToRadians(lat2-lat1);
-      var dLon = degreesToRadians(lon2-lon1);
-
-      lat1 = degreesToRadians(lat1);
-      lat2 = degreesToRadians(lat2);
-
-      var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
-              Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2);
-      var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a));
-      return earthRadiusMiles * c;
+    bearingFromUser: state => tree => {
+      return bearing(
+        [ state.longitude, state.latitude ],
+        [ tree.Longitude,tree.Latitude ],
+        { final: true }
+      );
+    },
+    distanceFromUser: state => tree => {
+      return distance(
+        [ state.longitude, state.latitude ],
+        [ tree.Longitude, tree.Latitude ],
+        { units: 'miles'}
+      );
     },
     getTree: state => id => {
       const idInt = parseInt(id);
@@ -99,9 +95,10 @@ const store = new Vuex.Store({
       state.treeDataLoaded = true;
     },
     setTreeDistance(state, details) {
-      const { index, distanceMiles, distanceHuman } = details;
+      const { index, distanceMiles, distanceHuman, bearing } = details;
       Vue.set(state.trees[index], 'distanceMiles', distanceMiles);
       Vue.set(state.trees[index], 'distanceHuman', distanceHuman);
+      Vue.set(state.trees[index], 'bearing', bearing);
     }
   },
   state: {

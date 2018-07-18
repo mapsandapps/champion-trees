@@ -9,9 +9,14 @@ export default [
         component: () => import('pages/List')
       },
       {
-        path: '/trees/:id',
+        path: 'trees/:id',
         name: 'Details',
         component: () => import('pages/Details')
+      },
+      {
+        path: 'trees/:id/navigate',
+        name: 'Navigate',
+        component: () => import('pages/Navigate')
       }
     ]
   },
