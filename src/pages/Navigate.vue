@@ -43,7 +43,7 @@
 <script>
 import round from 'lodash/round';
 import { colors, openURL } from 'quasar';
-import { mapGetters } from 'vuex';
+import { mapGetters, mapMutations } from 'vuex';
 
 export default {
   name: 'Navigate',
@@ -51,6 +51,7 @@ export default {
     return {
       compassDirection: null,
       compassError: null,
+      geolocationWatcherID: null,
       primaryColor: colors.getBrand('primary'),
       tree: null
     };
@@ -82,6 +83,9 @@ export default {
     }
   },
   methods: {
+    ...mapMutations([
+      'setCoordinates'
+    ]),
     handleEventData(eventData) {
       // NOTE: currently only set to work on iOS
       this.compassDirection = eventData.alpha;
@@ -92,6 +96,20 @@ export default {
         // TODO: maybe do something with eventData.alpha, but it's complicated
         this.compassError = 'Compass not supported in this browser';
       }
+    },
+    handleGeolocationData(data) {
+      this.setCoordinates(data.coords);
+      this.$q.notify({
+        message: 'Geolocation updated',
+        color: 'positive',
+        icon: 'location_on'
+      });
+    },
+    handleGeolocationError(error) {
+      this.$q.notify({
+        message: 'Geolocation failed',
+        icon: 'location_off'
+      });
     },
     viewTreeInGoogleMaps() {
       openURL(`https://www.google.com/maps/search/${this.tree.Latitude},+${this.tree.Longitude}/`);
@@ -105,9 +123,11 @@ export default {
     } else {
       this.compassError = 'Compass not supported in this browser';
     }
+    this.geolocationWatcherID = navigator.geolocation.watchPosition(this.handleGeolocationData, this.handleGeolocationError);
   },
   beforeDestroy() {
     window.removeEventListener('deviceorientation', this.handleEventData);
+    navigator.geolocation.clearWatch(this.geolocationWatcherID);
   }
 };
 </script>

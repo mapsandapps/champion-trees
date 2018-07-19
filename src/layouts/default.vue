@@ -8,7 +8,7 @@
 </template>
 
 <script>
-import { Loading, colors } from 'quasar';
+import { Loading, QSpinnerRings, colors } from 'quasar';
 import { mapActions, mapState } from 'vuex';
 
 colors.setBrand('primary', '#ffc107');
@@ -20,12 +20,9 @@ export default {
   components: {
     Loading
   },
-  data () {
-    return {
-    }
-  },
   computed: {
     ...mapState([
+      'geolocationAttempted',
       'treeDataLoaded'
     ])
   },
@@ -36,20 +33,24 @@ export default {
     ])
   },
   watch: {
-    treeDataLoaded() {
-      if (this.treeDataLoaded) {
+    geolocationAttempted() {
+      if (this.geolocationAttempted) {
         Loading.hide();
       }
     }
   },
   mounted() {
     Loading.show({
-      message: 'Loading trees...'
+      message: 'Loading trees...',
+      spinner: 'QSpinnerRings',
+      spinnerColor: 'primary',
+      spinnerSize: 100
     });
     this.fetchTreeData()
       .then(() => {
         this.findUserLocation();
       });
+    // TODO: dismiss loading spinner after 10 seconds or so, in case things break
   }
 }
 </script>

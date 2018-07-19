@@ -13,7 +13,7 @@
 </template>
 
 <script>
-import { mapGetters } from 'vuex';
+import { mapGetters, mapState } from 'vuex';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -26,8 +26,6 @@ L.Icon.Default.mergeOptions({
 
 export default {
   name: 'Map',
-  components: {
-  },
   props: {
     trees: {
       type: Array,
@@ -36,13 +34,23 @@ export default {
   },
   data() {
     return {
-      selectedTreeData: null
+      selectedTreeData: null,
+      userDot: null
     };
   },
   computed: {
     ...mapGetters([
       'getTree'
+    ]),
+    ...mapState([
+      'latitude',
+      'longitude'
     ])
+  },
+  watch: {
+    latitude() {
+      this.updateUserDot();
+    }
   },
   methods: {
     navigateToDetails() {
@@ -53,29 +61,40 @@ export default {
     },
     onClick(data) {
       this.selectedTreeData = this.getTree(data.target.id);
+    },
+    updateUserDot() {
+      if (this.userDot) this.userDot.removeFrom(this.map);
+      this.userDot = L.circleMarker({
+        lat: this.latitude,
+        lon: this.longitude
+      }).addTo(this.map);
     }
   },
   mounted() {
-    const map = new L.Map(this.$refs.map).setView([0, 0], 4);
+    this.map = new L.Map(this.$refs.map).setView([0, 0], 4);
 
     var markers = [];
 
     L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       maxZoom: 19,
       attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-    }).addTo(map);
+    }).addTo(this.map);
 
     this.trees.forEach(tree => {
       let marker = L.marker({
         lat: tree.Latitude,
         lon: tree.Longitude
-      }).on('click', this.onClick).addTo(map);
+      }).on('click', this.onClick).addTo(this.map);
       marker.id = tree.ID;
       markers.push(marker);
     });
 
     let markerGroup = new L.featureGroup(markers);
-    map.fitBounds(markerGroup.getBounds());
+    this.map.fitBounds(markerGroup.getBounds());
+
+    if (this.latitude) {
+      this.updateUserDot();
+    }
   }
 };
 </script>

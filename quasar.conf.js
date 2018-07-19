@@ -51,6 +51,7 @@ module.exports = function (ctx) {
         'QCardMain',
         'QCardTitle',
         'QIcon',
+        'QInnerLoading',
         'QItem',
         'QItemMain',
         'QItemSide',
@@ -61,6 +62,7 @@ module.exports = function (ctx) {
         'QListHeader',
         'QPage',
         'QPageContainer',
+        'QSpinnerRings',
         'QToolbar',
         'QToolbarTitle'
       ],

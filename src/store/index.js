@@ -18,6 +18,7 @@ var tabletop;
 const store = new Vuex.Store({
   state: {
     currentListingView: 'list',
+    geolocationAttempted: false,
     latitude: null,
     longitude: null,
     treeDataLoaded: false,
@@ -36,10 +37,14 @@ const store = new Vuex.Store({
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
           commit('setCoordinates', position.coords);
+          commit('setGeolocationAttempted', true);
           dispatch('setTreeDistances');
+        }, error => {
+          commit('setGeolocationAttempted', true);
         });
       } else {
         console.log('Error: no geolocation');
+        commit('setGeolocationAttempted', true);
       }
     },
     setTreeDistances({ state, commit, getters }) {
@@ -96,6 +101,9 @@ const store = new Vuex.Store({
     },
     setCurrentListingView(state, view) {
       state.currentListingView = view;
+    },
+    setGeolocationAttempted(state, value) {
+      state.geolocationAttempted = value;
     },
     setTreeData(state) {
       state.trees = tabletop.sheets('trees').elements;

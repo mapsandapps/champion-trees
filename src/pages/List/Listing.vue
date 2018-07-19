@@ -49,7 +49,8 @@ export default {
       'getTrees'
     ]),
     ...mapState([
-      'currentListingView'
+      'currentListingView',
+      'geolocationAttempted'
     ]),
     mode: {
       get() {
@@ -64,7 +65,11 @@ export default {
       }
     },
     sortedTrees() {
-      return orderBy(this.getTrees, ['distanceMiles'], ['asc']);
+      if (this.geolocationAttempted) {
+        return orderBy(this.getTrees, ['distanceMiles'], ['asc']);
+      } else {
+        return [];
+      }
     }
   },
   methods: {
