@@ -17,9 +17,6 @@ colors.setBrand('warning', '#db2828');
 
 export default {
   name: 'LayoutDefault',
-  components: {
-    Loading
-  },
   computed: {
     ...mapState([
       'geolocationAttempted',
@@ -35,12 +32,12 @@ export default {
   watch: {
     geolocationAttempted() {
       if (this.geolocationAttempted) {
-        Loading.hide();
+        this.$q.loading.hide();
       }
     }
   },
   mounted() {
-    Loading.show({
+    this.$q.loading.show({
       message: 'Loading trees...',
       spinner: 'QSpinnerRings',
       spinnerColor: 'primary',
@@ -50,7 +47,11 @@ export default {
       .then(() => {
         this.findUserLocation();
       });
-    // TODO: dismiss loading spinner after 10 seconds or so, in case things break
+    const hideLoading = setInterval(() => {
+      // hide spinner eventually, just in case something bugs out
+      this.$q.loading.hide();
+      clearInterval(hideLoading);
+    }, 15000);
   }
 }
 </script>
