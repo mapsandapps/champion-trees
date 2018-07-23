@@ -5,12 +5,11 @@
     label-lines="1"
     :sublabel="tree['LOCATION']"
     sublabel-lines="1" />
-  <q-item-side right :stamp="tree.distanceHuman" />
+  <q-item-side v-if="tree.distance" right :stamp="tree.distance | distanceHuman" />
 </div>
 </template>
 
 <script>
-
 export default {
   name: 'Item',
   components: {
@@ -20,16 +19,6 @@ export default {
       type: Object,
       required: true
     }
-  },
-  data() {
-    return {
-    };
-  },
-  computed: {
-  },
-  methods: {
-  },
-  mounted() {
   }
 };
 </script>

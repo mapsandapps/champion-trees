@@ -29,13 +29,6 @@ export default {
       'findUserLocation'
     ])
   },
-  watch: {
-    geolocationAttempted() {
-      if (this.geolocationAttempted) {
-        this.$q.loading.hide();
-      }
-    }
-  },
   mounted() {
     this.$q.loading.show({
       message: 'Loading trees...',
@@ -43,10 +36,13 @@ export default {
       spinnerColor: 'primary',
       spinnerSize: 100
     });
-    this.fetchTreeData()
-      .then(() => {
-        this.findUserLocation();
-      });
+    Promise.all([
+      this.fetchTreeData(),
+      this.findUserLocation()
+    ])
+    .then(() => { // FIXME: not working
+      this.$q.loading.hide();
+    });
     const hideLoading = setInterval(() => {
       // hide spinner eventually, just in case something bugs out
       this.$q.loading.hide();

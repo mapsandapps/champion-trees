@@ -3,7 +3,7 @@ import Vuex from 'vuex'
 import Tabletop from 'tabletop';
 
 import find from 'lodash/find';
-import floor from 'lodash/floor';
+import findIndex from 'lodash/findIndex';
 import bearing from '@turf/bearing';
 import distance from '@turf/distance';
 
@@ -19,17 +19,19 @@ const store = new Vuex.Store({
   state: {
     currentListingView: 'list',
     geolocationAttempted: false,
+    geolocationSucceeded: false,
     latitude: null,
     longitude: null,
     treeDataLoaded: false,
     trees: []
   },
   actions: {
-    fetchTreeData({ commit }) {
+    fetchTreeData({ commit, dispatch }) {
       tabletop = Tabletop.init({
         key: 'https://docs.google.com/spreadsheets/d/1r0KzMrtXVKGkphr_XYU2Gi-7-0OfJ4tkOECAGrHHHlQ/edit?usp=sharing',
         callback: function(data, tabletop) {
           commit('setTreeData');
+          dispatch('setTreeDistances');
         }
       });
     },
@@ -37,6 +39,7 @@ const store = new Vuex.Store({
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
           commit('setCoordinates', position.coords);
+          commit('setGeolocationSucceeded', true);
           commit('setGeolocationAttempted', true);
           dispatch('setTreeDistances');
         }, error => {
@@ -47,28 +50,14 @@ const store = new Vuex.Store({
         commit('setGeolocationAttempted', true);
       }
     },
-    setTreeDistances({ state, commit, getters }) {
-      state.trees.forEach((tree, index) => {
-        if (tree.Latitude && tree.Longitude) {
-          const distanceMiles = getters.distanceFromUser(tree);
-          var distanceHuman;
-          // TODO: convert this to a filter
-          if (distanceMiles >= 1) {
-            let miles = floor(distanceMiles, 1);
-            distanceHuman = `${miles} ${miles === 1 ? 'mile' : 'miles'}`;
-          } else {
-            distanceHuman = `${Math.floor(distanceMiles * 1760)} yards`;
+    setTreeDistances({ state, getters }) {
+      if (state.trees.length > 0) {
+        state.trees.forEach((tree, index) => {
+          if (tree.Latitude && tree.Longitude) {
+            Vue.set(state.trees[index], 'distance', getters.treeDistance(tree.ID));
           }
-          const bearing = getters.bearingFromUser(tree);
-          const details = {
-            index,
-            distanceMiles,
-            distanceHuman,
-            bearing
-          };
-          commit('setTreeDistance', details);
-        }
-      });
+        });
+      }
     }
   },
   getters: {
@@ -79,19 +68,26 @@ const store = new Vuex.Store({
         { final: true }
       );
     },
-    distanceFromUser: state => tree => {
-      return distance(
-        [ state.longitude, state.latitude ],
-        [ tree.Longitude, tree.Latitude ],
-        { units: 'miles'}
-      );
-    },
     getTree: state => id => {
       const idInt = parseInt(id);
       return find(state.trees, ['ID', id]);
     },
     getTrees: state => {
       return state.trees;
+    },
+    treeDistance: (state, getters) => id => {
+      if (state.latitude && state.longitude) {
+        const tree = getters.getTree(id);
+        const treeDistance = distance(
+          [ state.longitude, state.latitude ],
+          [ tree.Longitude, tree.Latitude ],
+          { units: 'miles' }
+        );
+        const treeIndex = findIndex(state.trees, ['ID', id]);
+        Vue.set(state.trees[treeIndex], 'distance', treeDistance);
+        return treeDistance;
+      }
+      return null;
     }
   },
   mutations: {
@@ -105,15 +101,12 @@ const store = new Vuex.Store({
     setGeolocationAttempted(state, value) {
       state.geolocationAttempted = value;
     },
+    setGeolocationSucceeded(state, value) {
+      state.geolocationSucceeded = value;
+    },
     setTreeData(state) {
       state.trees = tabletop.sheets('trees').elements;
       state.treeDataLoaded = true;
-    },
-    setTreeDistance(state, details) {
-      const { index, distanceMiles, distanceHuman, bearing } = details;
-      Vue.set(state.trees[index], 'distanceMiles', distanceMiles);
-      Vue.set(state.trees[index], 'distanceHuman', distanceHuman);
-      Vue.set(state.trees[index], 'bearing', bearing);
     }
   }
 })

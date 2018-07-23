@@ -50,7 +50,7 @@ export default {
     ]),
     ...mapState([
       'currentListingView',
-      'geolocationAttempted'
+      'geolocationSucceeded'
     ]),
     mode: {
       get() {
@@ -65,10 +65,10 @@ export default {
       }
     },
     sortedTrees() {
-      if (this.geolocationAttempted) {
-        return orderBy(this.getTrees, ['distanceMiles'], ['asc']);
+      if (this.geolocationSucceeded) {
+        return orderBy(this.getTrees, ['distance'], ['asc']);
       } else {
-        return [];
+        return this.getTrees;
       }
     }
   },
