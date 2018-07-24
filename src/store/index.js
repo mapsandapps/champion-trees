@@ -9,10 +9,6 @@ import distance from '@turf/distance';
 
 Vue.use(Vuex)
 
-function degreesToRadians(degrees) {
-  return degrees * Math.PI / 180;
-}
-
 var tabletop;
 
 const store = new Vuex.Store({

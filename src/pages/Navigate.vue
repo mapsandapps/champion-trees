@@ -14,7 +14,7 @@
     <h3>{{ tree['COMMON NAME'] }}</h3>
     <h4
       :style="{ color: primaryColor }">
-      {{ tree.distanceHuman }}
+      {{ tree.distance | distanceHuman }}
     </h4>
   </div>
   <div>
@@ -58,15 +58,16 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'bearingFromUser',
       'getTree'
     ]),
     arrowDirection() {
       // TODO: remove this dev mode code
       if (process.env.DEV) {
-        return this.tree.bearing - 90; // in dev, assume facing east
+        return this.treeBearing - 90; // in dev, assume facing east
       }
-      if (this.tree.bearing && this.compassDirection) {
-        const direction = this.tree.bearing - this.compassDirection;
+      if (this.treeBearing && this.compassDirection) {
+        const direction = this.treeBearing - this.compassDirection;
         if (direction < 0) {
           return direction + 360;
         } else if (direction >= 360) {
@@ -79,7 +80,7 @@ export default {
       }
     },
     treeBearing() {
-      return round(this.tree.bearing);
+      return round(this.bearingFromUser(this.tree));
     }
   },
   methods: {
@@ -99,11 +100,6 @@ export default {
     },
     handleGeolocationData(data) {
       this.setCoordinates(data.coords);
-      this.$q.notify({
-        message: 'Geolocation updated',
-        color: 'positive',
-        icon: 'location_on'
-      });
     },
     handleGeolocationError(error) {
       this.$q.notify({
