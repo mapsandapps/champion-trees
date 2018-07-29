@@ -43,7 +43,7 @@
 <script>
 import round from 'lodash/round';
 import { colors, openURL } from 'quasar';
-import { mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'Navigate',
@@ -84,8 +84,8 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      'setCoordinates'
+    ...mapActions([
+      'setLocation'
     ]),
     handleEventData(eventData) {
       // NOTE: currently only set to work on iOS
@@ -99,7 +99,7 @@ export default {
       }
     },
     handleGeolocationData(data) {
-      this.setCoordinates(data.coords);
+      this.setLocation(data.coords);
     },
     handleGeolocationError(error) {
       this.$q.notify({

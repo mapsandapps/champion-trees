@@ -34,10 +34,9 @@ const store = new Vuex.Store({
     findUserLocation({ commit, dispatch }) {
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(position => {
-          commit('setCoordinates', position.coords);
           commit('setGeolocationSucceeded', true);
           commit('setGeolocationAttempted', true);
-          dispatch('setTreeDistances');
+          dispatch('setLocation', position.coords);
         }, error => {
           commit('setGeolocationAttempted', true);
         });
@@ -45,6 +44,10 @@ const store = new Vuex.Store({
         console.log('Error: no geolocation');
         commit('setGeolocationAttempted', true);
       }
+    },
+    setLocation({ commit, dispatch }, coords) {
+      commit('setCoordinates', coords);
+      dispatch('setTreeDistances');
     },
     setTreeDistances({ state, getters }) {
       if (state.trees.length > 0) {
