@@ -36,6 +36,19 @@
       @click.native="viewTreeInGoogleMaps(tree)"
       label="View in Google Maps"
       color="secondary" />
+    <q-btn
+      v-if="seen"
+      class="q-my-md"
+      @click.native="uncheckTree(tree)"
+      label="Mark unseen"
+      color="warning" />
+    <q-btn
+      v-else
+      class="q-my-md"
+      @click.native="checkTree(tree)"
+      icon="check"
+      label="Mark seen"
+      color="positive" />
   </div>
 </div>
 </template>
@@ -59,7 +72,8 @@ export default {
   computed: {
     ...mapGetters([
       'bearingFromUser',
-      'getTree'
+      'getTree',
+      'treeSeen'
     ]),
     arrowDirection() {
       // TODO: remove this dev mode code
@@ -79,13 +93,18 @@ export default {
         return null;
       }
     },
+    seen() {
+      return this.treeSeen(this.tree.ID)
+    },
     treeBearing() {
       return round(this.bearingFromUser(this.tree));
     }
   },
   methods: {
     ...mapActions([
-      'setLocation'
+      'checkTree',
+      'setLocation',
+      'uncheckTree'
     ]),
     handleEventData(eventData) {
       // NOTE: currently only set to work on iOS

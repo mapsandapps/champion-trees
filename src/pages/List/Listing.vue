@@ -68,9 +68,9 @@ export default {
     }
   },
   methods: {
-    ...mapMutations([
-      'setCurrentListingView'
-    ])
+    ...mapMutations({
+      setCurrentListingView: 'SET_CURRENT_LISTING_VIEW'
+    })
   }
 }
 </script>
