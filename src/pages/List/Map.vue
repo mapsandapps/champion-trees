@@ -101,6 +101,6 @@ export default {
 
 <style lang="scss" scoped>
 #map {
-  height: 500px;
+  height: 400px;
 }
 </style>

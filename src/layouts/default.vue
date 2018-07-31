@@ -11,7 +11,7 @@
 import { Loading, QSpinnerRings, colors } from 'quasar';
 import { mapActions, mapState } from 'vuex';
 
-colors.setBrand('primary', '#ffc107');
+colors.setBrand('primary', '#ffa801');
 colors.setBrand('secondary', '#047be3');
 colors.setBrand('warning', '#db2828');
 

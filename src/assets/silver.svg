@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="458px" height="423px" viewBox="0 0 458 423" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 50.2 (55047) - http://www.bohemiancoding.com/sketch -->
+    <title>Silver</title>
+    <desc>Created with Sketch.</desc>
+    <defs></defs>
+    <g id="Silver" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <circle id="Oval-2" fill="#D8D8D8" cx="228" cy="278" r="145"></circle>
+        <path d="M197.514417,108.693377 C164.393554,114.617444 134.558678,130.022314 110.917776,152 L107,152 L0,0 L121,0 L197.514417,108.693377 Z" id="Combined-Shape" fill="#D8D8D8"></path>
+        <path d="M345.082224,152 C321.863281,130.414586 292.669499,115.169451 260.255917,109.019632 L337,0 L458,0 L351,152 L345.082224,152 Z" id="Combined-Shape" fill="#D8D8D8"></path>
+        <text id="2" font-family="Inconsolata-Bold, Inconsolata" font-size="200" font-weight="bold" letter-spacing="-0.85" fill="#FFFFFF">
+            <tspan x="178.425" y="340">2</tspan>
+        </text>
+    </g>
+</svg>

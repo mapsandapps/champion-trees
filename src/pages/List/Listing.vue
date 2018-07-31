@@ -12,16 +12,15 @@
         :options="[{ label: 'List', value: 'list' }, { label: 'Map', value: 'map' }]" />
     </q-toolbar>
   </q-layout-header>
-  <q-page padding id="listing" class="justify-center">
-    <q-list v-if="mode === 'list'" highlight separator>
-      <q-item
-        v-for="tree in sortedTrees"
-        :key="tree.ID" :to="'/trees/' + tree.ID">
-        <Item :tree="tree" />
-      </q-item>
-    </q-list>
-    <Map v-else :trees="sortedTrees" />
-  </q-page>
+  <div v-if="mode === 'list'" class="list" highlight separator>
+    <q-item
+      v-for="tree in sortedTrees"
+      :key="tree.ID"
+      :to="`/trees/${tree.ID}`">
+      <Item :tree="tree" />
+    </q-item>
+  </div>
+  <Map v-else :trees="sortedTrees" />
 </div>
 </template>
 
@@ -39,10 +38,6 @@ export default {
   components: {
     Item,
     Map
-  },
-  data() {
-    return {
-    }
   },
   computed: {
     ...mapGetters([
@@ -92,6 +87,14 @@ export default {
         border-radius: 28px;
       }
     }
+  }
+}
+.list {
+  .q-item {
+    padding: 0px;
+  }
+  .q-item-link:hover {
+    background: rgba(189, 189, 189, 0.15);
   }
 }
 </style>

@@ -1,16 +1,11 @@
 <template>
-<q-card class="q-ma-sm">
-  <q-card-title>Prototype Diagram</q-card-title>
-  <q-card-main>
-    <div class="diagram">
-      <img src="../assets/tree.png">
-      <div class="dbh">{{ dbh }}"</div>
-      <div class="height">{{ height }}'</div>
-      <div class="spread">{{ spread }}'</div>
-      <div class="points">{{ points }} points</div>
-    </div>
-  </q-card-main>
-</q-card>
+<div class="diagram">
+  <div class="spread">{{ spread }}' spread</div>
+  <img src="../assets/tree2.png">
+  <span class="height">{{ height }}'<br>height</span>
+  <div class="dbh">{{ dbh }}" diameter at breast height</div>
+  <div class="points">{{ points }} points</div>
+</div>
 </template>
 
 <script>
@@ -28,34 +23,26 @@ export default {
 <style lang="scss" scoped>
 .diagram {
   position: relative;
-  img {
-    width: 50%;
-    height: 50%;
+  width: 255px;
+  img,
+  .height {
+    display: inline-block;
+    vertical-align: middle;
   }
-  .dbh {
-    position: absolute;
-    top: 320px;
-    left: 100px;
-    color: orange;
+  .dbh,
+  .spread {
+    width: 205px;
+    text-align: center;
   }
   .height {
-    position: absolute;
-    top: 120px;
-    left: 40px;
-    color: red;
-  }
-  .spread {
-    position: absolute;
-    top: 54px;
-    left: 110px;
-    color: purple;
+    padding-top: 130px;
+    height: 293px;
   }
   .points {
     position: absolute;
     font-size: 20px;
-    top: 124px;
-    left: 124px;
-    color: blue;
+    top: 114px;
+    left: 44px;
   }
 }
 </style>
