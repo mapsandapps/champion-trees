@@ -3,11 +3,20 @@
   <div class="header">{{ tree['COMMON NAME'] }}</div>
   <div class="subheader">{{ tree['LOCATION'] }}</div>
   <div v-if="tree.distance" class="distance">{{ tree.distance | distanceHuman }}</div>
-  <div v-if="rank" class="medal"><img :src="`statics/${rank}.svg`" /></div>
+  <div v-if="seen">
+    <q-icon
+      class="medal"
+      color="positive"
+      name="check_box"
+      size="40px" />
+  </div>
+  <div v-else-if="rank" class="medal"><img :src="`statics/${rank}.svg`" /></div>
 </div>
 </template>
 
 <script>
+import { mapGetters } from 'vuex';
+
 export default {
   name: 'Item',
   props: {
@@ -17,6 +26,9 @@ export default {
     }
   },
   computed: {
+    ...mapGetters([
+      'treeSeen'
+    ]),
     rank() {
       if (this.tree.Rank == 1) {
         return 'gold';
@@ -26,6 +38,9 @@ export default {
         return 'bronze';
       }
       return null;
+    },
+    seen() {
+      return this.treeSeen(this.tree.ID)
     }
   }
 };
