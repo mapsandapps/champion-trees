@@ -3,7 +3,7 @@
   <div class="header">{{ tree['COMMON NAME'] }}</div>
   <div class="subheader">{{ tree['LOCATION'] }}</div>
   <div v-if="tree.distance" class="distance">{{ tree.distance | distanceHuman }}</div>
-  <div v-if="rank" class="medal"><img :src="`../assets/${rank}.svg`" /></div>
+  <div v-if="rank" class="medal"><img :src="`statics/${rank}.svg`" /></div>
 </div>
 </template>
 

@@ -1,7 +1,7 @@
 <template>
 <div class="diagram">
   <div class="spread">{{ spread }}' spread</div>
-  <img src="../assets/tree2.png">
+  <img src="~assets/tree2.png">
   <span class="height">{{ height }}'<br>height</span>
   <div class="dbh">{{ dbh }}" diameter at breast height</div>
   <div class="points">{{ points }} points</div>
