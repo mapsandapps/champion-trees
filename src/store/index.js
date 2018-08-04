@@ -17,7 +17,7 @@ var tabletop;
 const store = new Vuex.Store({
   state: {
     checked: cloneDeep(JSON.parse(localStorage.getItem('checked'))) || [],
-    currentListingView: 'list',
+    currentListingView: localStorage.getItem('currentListingView') || 'list',
     geolocationAttempted: false,
     geolocationSucceeded: false,
     latitude: null,
@@ -116,6 +116,7 @@ const store = new Vuex.Store({
     },
     SET_CURRENT_LISTING_VIEW(state, view) {
       state.currentListingView = view;
+      localStorage.setItem('currentListingView', view);
     },
     SET_GEOLOCATION_ATTEMPTED(state, value) {
       state.geolocationAttempted = value;
