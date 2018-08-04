@@ -5129,6 +5129,10 @@ quasar-framework@0.15.10:
   version "0.15.10"
   resolved "https://registry.yarnpkg.com/quasar-framework/-/quasar-framework-0.15.10.tgz#fe688442d005d4c9370c7aff9c79c4577ddd64e8"
 
+quasar-framework@0.17.6:
+  version "0.17.6"
+  resolved "https://registry.yarnpkg.com/quasar-framework/-/quasar-framework-0.17.6.tgz#cd695ff8577bbf9cb7259068272ddba38dbb881a"
+
 query-string@^4.1.0:
   version "4.3.4"
   resolved "https://registry.yarnpkg.com/query-string/-/query-string-4.3.4.tgz#bbb693b9ca915c232515b228b1a02b609043dbeb"
