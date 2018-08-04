@@ -1,9 +1,11 @@
 <template>
   <div>
     <div id="map" ref="map" />
-    <div v-if="selectedTreeData">
-      {{ selectedTreeData['COMMON NAME'] }}<br>
-      {{ selectedTreeData['LOCATION'] }}<br>
+    <div id="map-info" v-if="selectedTreeData">
+      <div>
+        {{ selectedTreeData['COMMON NAME'] }}<br>
+        {{ selectedTreeData['LOCATION'] }}
+      </div>
       <q-btn
         @click="navigateToDetails"
         label="View details"
@@ -24,6 +26,56 @@ L.Icon.Default.mergeOptions({
   shadowUrl: require('leaflet/dist/images/marker-shadow.png')
 });
 
+const checkIcon = L.icon({
+  iconRetinaUrl: 'statics/map-marker-check-2x.png',
+  iconUrl: 'statics/map-marker-check.png',
+  shadowUrl: 'statics/map-marker-shadow.png',
+  iconSize: [60, 40],
+  shadowSize: [60, 40],
+  iconAnchor: [30, 40],
+  shadowAnchor: [30, 40]
+});
+
+const goldIcon = L.icon({
+  iconRetinaUrl: 'statics/map-marker-gold-2x.png',
+  iconUrl: 'statics/map-marker-gold.png',
+  shadowUrl: 'statics/map-marker-shadow.png',
+  iconSize: [60, 40],
+  shadowSize: [60, 40],
+  iconAnchor: [30, 40],
+  shadowAnchor: [30, 40]
+});
+
+const silverIcon = L.icon({
+  iconRetinaUrl: 'statics/map-marker-silver-2x.png',
+  iconUrl: 'statics/map-marker-silver.png',
+  shadowUrl: 'statics/map-marker-shadow.png',
+  iconSize: [60, 40],
+  shadowSize: [60, 40],
+  iconAnchor: [30, 40],
+  shadowAnchor: [30, 40]
+});
+
+const bronzeIcon = L.icon({
+  iconRetinaUrl: 'statics/map-marker-bronze-2x.png',
+  iconUrl: 'statics/map-marker-bronze.png',
+  shadowUrl: 'statics/map-marker-shadow.png',
+  iconSize: [60, 40],
+  shadowSize: [60, 40],
+  iconAnchor: [30, 40],
+  shadowAnchor: [30, 40]
+});
+
+const unrankedIcon = L.icon({
+  iconRetinaUrl: 'statics/map-marker-unranked-2x.png',
+  iconUrl: 'statics/map-marker-unranked.png',
+  shadowUrl: 'statics/map-marker-shadow.png',
+  iconSize: [60, 40],
+  shadowSize: [60, 40],
+  iconAnchor: [30, 40],
+  shadowAnchor: [30, 40]
+});
+
 export default {
   name: 'Map',
   props: {
@@ -40,7 +92,8 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getTree'
+      'getTree',
+      'treeSeen'
     ]),
     ...mapState([
       'latitude',
@@ -71,20 +124,35 @@ export default {
     }
   },
   mounted() {
-    this.map = new L.Map(this.$refs.map).setView([0, 0], 4);
+    this.map = new L.Map(this.$refs.map).setView([0, 0], 4)
+    .on('click', () => this.selectedTreeData = null);
 
     var markers = [];
 
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      maxZoom: 19,
-      attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
+      attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+      minZoom: 1,
+      maxZoom: 19
     }).addTo(this.map);
 
     this.trees.forEach(tree => {
+      let treeIcon = unrankedIcon;
+      if (this.treeSeen(tree.ID)) {
+        treeIcon = checkIcon;
+      } else if (tree.Rank == 1) {
+        treeIcon = goldIcon;
+      } else if (tree.Rank == 2) {
+        treeIcon = silverIcon;
+      } else if (tree.Rank == 3) {
+        treeIcon = bronzeIcon;
+      }
       let marker = L.marker({
         lat: tree.Latitude,
         lon: tree.Longitude
-      }).on('click', this.onClick).addTo(this.map);
+      },{
+        icon: treeIcon
+      })
+      .on('click', this.onClick).addTo(this.map);
       marker.id = tree.ID;
       markers.push(marker);
     });
@@ -101,6 +169,18 @@ export default {
 
 <style lang="scss" scoped>
 #map {
-  height: 400px;
+  height: calc(100vh - 50px);
+}
+#map-info {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 1000;
+  background-color: rgba(255, 255, 255, 0.9);
+  padding: 10px;
+  display: grid;
+  grid-template-columns: 1fr 125px;
+  grid-column-gap: 10px;
 }
 </style>
