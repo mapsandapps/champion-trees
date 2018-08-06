@@ -64,7 +64,6 @@ export default {
     return {
       compassDirection: null,
       compassError: null,
-      geolocationWatcherID: null,
       primaryColor: colors.getBrand('primary'),
       tree: null
     };
@@ -103,7 +102,6 @@ export default {
   methods: {
     ...mapActions([
       'checkTree',
-      'setLocation',
       'uncheckTree'
     ]),
     handleEventData(eventData) {
@@ -117,32 +115,22 @@ export default {
         this.compassError = 'Compass not supported in this browser';
       }
     },
-    handleGeolocationData(data) {
-      this.setLocation(data.coords);
-    },
-    handleGeolocationError(error) {
-      this.$q.notify({
-        message: 'Geolocation failed',
-        icon: 'location_off'
-      });
-    },
     viewTreeInGoogleMaps() {
       openURL(`https://www.google.com/maps/search/${this.tree.Latitude},+${this.tree.Longitude}/`);
     }
   },
   mounted() {
     this.tree = this.getTree(this.$route.params.id);
+
     if (window.DeviceOrientationEvent) {
       this.compassError = 'Compass is supported by this browser, but no reading has occurred';
       window.addEventListener('deviceorientation', this.handleEventData);
     } else {
       this.compassError = 'Compass not supported in this browser';
     }
-    this.geolocationWatcherID = navigator.geolocation.watchPosition(this.handleGeolocationData, this.handleGeolocationError);
   },
   beforeDestroy() {
     window.removeEventListener('deviceorientation', this.handleEventData);
-    navigator.geolocation.clearWatch(this.geolocationWatcherID);
   }
 };
 </script>

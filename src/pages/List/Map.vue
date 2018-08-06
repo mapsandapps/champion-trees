@@ -15,7 +15,7 @@
 </template>
 
 <script>
-import { mapGetters, mapState } from 'vuex';
+import { mapGetters } from 'vuex';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 
@@ -92,16 +92,13 @@ export default {
   },
   computed: {
     ...mapGetters([
+      'coordinates',
       'getTree',
       'treeSeen'
-    ]),
-    ...mapState([
-      'latitude',
-      'longitude'
     ])
   },
   watch: {
-    latitude() {
+    coordinates() {
       this.updateUserDot();
     }
   },
@@ -118,9 +115,10 @@ export default {
     updateUserDot() {
       if (this.userDot) this.userDot.removeFrom(this.map);
       this.userDot = L.circleMarker({
-        lat: this.latitude,
-        lon: this.longitude
+        lat: this.coordinates.latitude,
+        lon: this.coordinates.longitude
       }).addTo(this.map);
+      this.map.setView([this.coordinates.latitude, this.coordinates.longitude], 13);
     }
   },
   mounted() {
@@ -160,7 +158,7 @@ export default {
     let markerGroup = new L.featureGroup(markers);
     this.map.fitBounds(markerGroup.getBounds());
 
-    if (this.latitude) {
+    if (this.coordinates.latitude && this.coordinates.longitude) {
       this.updateUserDot();
     }
   }

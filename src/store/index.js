@@ -17,11 +17,13 @@ var tabletop;
 const store = new Vuex.Store({
   state: {
     checked: cloneDeep(JSON.parse(localStorage.getItem('checked'))) || [],
+    coordinates: {
+      latitude: null,
+      longitude: null
+    },
     currentListingView: localStorage.getItem('currentListingView') || 'list',
     geolocationAttempted: false,
     geolocationSucceeded: false,
-    latitude: null,
-    longitude: null,
     treeDataLoaded: false,
     trees: []
   },
@@ -74,10 +76,13 @@ const store = new Vuex.Store({
   getters: {
     bearingFromUser: state => tree => {
       return bearing(
-        [ state.longitude, state.latitude ],
+        [ state.coordinates.longitude, state.coordinates.latitude ],
         [ tree.Longitude,tree.Latitude ],
         { final: true }
       );
+    },
+    coordinates: state => {
+      return state.coordinates;
     },
     getTree: state => id => {
       const idInt = parseInt(id);
@@ -87,10 +92,10 @@ const store = new Vuex.Store({
       return state.trees;
     },
     treeDistance: (state, getters) => id => {
-      if (state.latitude && state.longitude) {
+      if (state.coordinates.latitude && state.coordinates.longitude) {
         const tree = getters.getTree(id);
         const treeDistance = distance(
-          [ state.longitude, state.latitude ],
+          [ state.coordinates.longitude, state.coordinates.latitude ],
           [ tree.Longitude, tree.Latitude ],
           { units: 'miles' }
         );
@@ -111,8 +116,7 @@ const store = new Vuex.Store({
       }
     },
     SET_COORDINATES(state, coordinates) {
-      state.latitude = coordinates.latitude;
-      state.longitude = coordinates.longitude;
+      state.coordinates = coordinates;
     },
     SET_CURRENT_LISTING_VIEW(state, view) {
       state.currentListingView = view;

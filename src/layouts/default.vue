@@ -18,6 +18,11 @@ colors.setBrand('positive', '#00c960')
 
 export default {
   name: 'LayoutDefault',
+  data() {
+    return {
+      geolocationWatcherID: null
+    }
+  },
   computed: {
     ...mapState([
       'geolocationAttempted',
@@ -27,8 +32,18 @@ export default {
   methods: {
     ...mapActions([
       'fetchTreeData',
-      'findUserLocation'
-    ])
+      'findUserLocation',
+      'setLocation'
+    ]),
+    handleGeolocationData(data) {
+      this.setLocation(data.coords);
+    },
+    handleGeolocationError(error) {
+      this.$q.notify({
+        message: 'Geolocation failed',
+        icon: 'location_off'
+      });
+    }
   },
   mounted() {
     this.$q.loading.show({
@@ -49,6 +64,11 @@ export default {
       this.$q.loading.hide();
       clearInterval(hideLoading);
     }, 15000);
+
+    this.geolocationWatcherID = navigator.geolocation.watchPosition(this.handleGeolocationData, this.handleGeolocationError);
+  },
+  beforeDestroy() {
+    navigator.geolocation.clearWatch(this.geolocationWatcherID);
   }
 }
 </script>
