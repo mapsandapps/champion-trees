@@ -10,7 +10,7 @@
       </div>
     </div>
     <div
-      v-if="tree.Latitude && tree.Longitude"
+      v-if="tree.latitude && tree.longitude"
       class="navigate">
       <router-link
         :to="`/trees/${tree.ID}/navigate`">

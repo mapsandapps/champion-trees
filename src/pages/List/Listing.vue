@@ -20,7 +20,7 @@
       <Item :tree="tree" />
     </q-item>
   </div>
-  <Map v-else :trees="sortedTrees" />
+  <Map v-else />
 </div>
 </template>
 
@@ -41,7 +41,7 @@ export default {
   },
   computed: {
     ...mapGetters([
-      'getTrees'
+      'trees'
     ]),
     ...mapState([
       'currentListingView',
@@ -61,9 +61,9 @@ export default {
     },
     sortedTrees() {
       if (this.geolocationSucceeded) {
-        return orderBy(this.getTrees, ['distance'], ['asc']);
+        return orderBy(this.trees, ['distance'], ['asc']);
       } else {
-        return this.getTrees;
+        return this.trees;
       }
     }
   },

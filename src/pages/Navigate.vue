@@ -116,7 +116,7 @@ export default {
       }
     },
     viewTreeInGoogleMaps() {
-      openURL(`https://www.google.com/maps/search/${this.tree.Latitude},+${this.tree.Longitude}/`);
+      openURL(`https://www.google.com/maps/search/${this.tree.latitude},+${this.tree.longitude}/`);
     }
   },
   mounted() {

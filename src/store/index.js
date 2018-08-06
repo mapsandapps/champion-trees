@@ -56,13 +56,13 @@ const store = new Vuex.Store({
       }
     },
     setLocation({ commit, dispatch }, coords) {
-      commit('SET_COORDINATES', coords);
       dispatch('setTreeDistances');
+      commit('SET_COORDINATES', coords);
     },
     setTreeDistances({ state, getters }) {
       if (state.trees.length > 0) {
         state.trees.forEach((tree, index) => {
-          if (tree.Latitude && tree.Longitude) {
+          if (tree.latitude && tree.longitude) {
             Vue.set(state.trees[index], 'distance', getters.treeDistance(tree.ID));
           }
         });
@@ -77,7 +77,7 @@ const store = new Vuex.Store({
     bearingFromUser: state => tree => {
       return bearing(
         [ state.coordinates.longitude, state.coordinates.latitude ],
-        [ tree.Longitude,tree.Latitude ],
+        [ tree.longitude,tree.latitude ],
         { final: true }
       );
     },
@@ -88,15 +88,12 @@ const store = new Vuex.Store({
       const idInt = parseInt(id);
       return find(state.trees, ['ID', id]);
     },
-    getTrees: state => {
-      return state.trees;
-    },
     treeDistance: (state, getters) => id => {
       if (state.coordinates.latitude && state.coordinates.longitude) {
         const tree = getters.getTree(id);
         const treeDistance = distance(
           [ state.coordinates.longitude, state.coordinates.latitude ],
-          [ tree.Longitude, tree.Latitude ],
+          [ tree.longitude, tree.latitude ],
           { units: 'miles' }
         );
         const treeIndex = findIndex(state.trees, ['ID', id]);
@@ -104,6 +101,9 @@ const store = new Vuex.Store({
         return treeDistance;
       }
       return null;
+    },
+    trees: state => {
+      return state.trees;
     },
     treeSeen: state => id => {
       return includes(state.checked, id);
@@ -130,6 +130,10 @@ const store = new Vuex.Store({
     },
     SET_TREE_DATA(state) {
       state.trees = tabletop.sheets('trees').elements;
+      state.trees.forEach(tree => {
+        tree.latitude = Number(tree.Latitude);
+        tree.longitude = Number(tree.Longitude);
+      });
       state.treeDataLoaded = true;
     },
     UNCHECK_TREE(state, tree) {

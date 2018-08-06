@@ -15,6 +15,7 @@
 </template>
 
 <script>
+import minBy from 'lodash/minBy';
 import { mapGetters } from 'vuex';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
@@ -78,12 +79,6 @@ const unrankedIcon = L.icon({
 
 export default {
   name: 'Map',
-  props: {
-    trees: {
-      type: Array,
-      required: true
-    }
-  },
   data() {
     return {
       selectedTreeData: null,
@@ -94,6 +89,7 @@ export default {
     ...mapGetters([
       'coordinates',
       'getTree',
+      'trees',
       'treeSeen'
     ])
   },
@@ -118,7 +114,22 @@ export default {
         lat: this.coordinates.latitude,
         lon: this.coordinates.longitude
       }).addTo(this.map);
-      this.map.setView([this.coordinates.latitude, this.coordinates.longitude], 13);
+      const closestTree = minBy(this.trees, 'distance');
+      if (closestTree) {
+        this.map.fitBounds([
+          [
+            this.coordinates.latitude,
+            this.coordinates.longitude
+          ],
+          [
+            closestTree.latitude,
+            closestTree.longitude
+          ]
+        ],
+        {
+          maxZoom: 13
+        });
+      }
     }
   },
   mounted() {
@@ -145,8 +156,8 @@ export default {
         treeIcon = bronzeIcon;
       }
       let marker = L.marker({
-        lat: tree.Latitude,
-        lon: tree.Longitude
+        lat: tree.latitude,
+        lon: tree.longitude
       },{
         icon: treeIcon
       })
