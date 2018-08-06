@@ -133,16 +133,28 @@ export default {
     }
   },
   mounted() {
+    const streets = L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
+      attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
+      minZoom: 1,
+      maxZoom: 19
+    });
+    const satellite = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    });
+
     this.map = new L.Map(this.$refs.map).setView([0, 0], 4)
     .on('click', () => this.selectedTreeData = null);
 
     var markers = [];
 
-    L.tileLayer('https://maps.wikimedia.org/osm-intl/{z}/{x}/{y}{r}.png', {
-      attribution: '<a href="https://wikimediafoundation.org/wiki/Maps_Terms_of_Use">Wikimedia</a>',
-      minZoom: 1,
-      maxZoom: 19
-    }).addTo(this.map);
+    const baseMaps = {
+      "Streets": streets,
+      "Satellite": satellite
+    };
+
+    L.control.layers(baseMaps, null).addTo(this.map);
+
+    streets.addTo(this.map);
 
     this.trees.forEach(tree => {
       let treeIcon = unrankedIcon;
