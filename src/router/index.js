@@ -2,8 +2,9 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import VueAnalytics from 'vue-analytics'
 
-import routes from './routes'
 import keys from '../keys'
+import routes from './routes'
+import titles from './titles';
 
 Vue.use(VueRouter)
 
@@ -33,5 +34,7 @@ Vue.use(VueAnalytics, {
     sendHitTask: !isDev
   }
 })
+
+titles(Router)
 
 export default Router

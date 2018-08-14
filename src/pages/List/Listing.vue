@@ -10,6 +10,10 @@
         rounded
         text-color="black"
         :options="[{ label: 'List', value: 'list' }, { label: 'Map', value: 'map' }]" />
+
+      <q-btn flat round dense
+        icon="more_horiz"
+        @click="openActionSheet" />
     </q-toolbar>
   </q-layout-header>
   <div v-if="mode === 'list'" class="list" highlight separator>
@@ -70,7 +74,46 @@ export default {
   methods: {
     ...mapMutations({
       setCurrentListingView: 'SET_CURRENT_LISTING_VIEW'
-    })
+    }),
+    openActionSheet() {
+      this.$q.actionSheet({
+        title: 'Learn more',
+        actions: [
+          {
+            label: 'About the trees',
+            icon: 'info',
+            handler: () => {
+              this.$router.push({
+                name: 'AboutTrees'
+              });
+            }
+          },
+          {
+            label: 'About the app',
+            icon: 'apps',
+            handler: () => {
+              this.$router.push({
+                name: 'AboutApp'
+              });
+            }
+          },
+          // {}, // separator
+          {
+            label: 'Donate',
+            icon: 'attach_money',
+            handler: () => {
+              this.$q.notify('Sorry, but you can\'t donate yet!')
+            }
+          }
+        ],
+        dismiss: {
+          label: 'Cancel',
+          handler: () => {
+            this.$q.notify('Cancelled...')
+          }
+        }
+      })
+    }
   }
 }
 </script>

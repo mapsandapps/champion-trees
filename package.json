@@ -1,8 +1,8 @@
 {
   "name": "champion-trees",
   "version": "1.0.0",
-  "description": "A Quasar Framework app",
-  "productName": "Quasar App",
+  "description": "A guide to Atlana's largest trees",
+  "productName": "Atlanta's Champion Trees",
   "cordovaId": "org.cordova.quasar.app",
   "author": "Shawn Taylor <shawn@mapsandapps.net>",
   "private": true,
