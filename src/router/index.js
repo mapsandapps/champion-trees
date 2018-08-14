@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
+import VueAnalytics from 'vue-analytics'
 
 import routes from './routes'
+import keys from '../keys'
 
 Vue.use(VueRouter)
 
@@ -19,6 +21,17 @@ const Router = new VueRouter({
   base: process.env.VUE_ROUTER_BASE,
   scrollBehavior: () => ({ y: 0 }),
   routes
+})
+
+const isDev = process.env.DEV
+
+Vue.use(VueAnalytics, {
+  id: keys.googleAnalytics,
+  Router,
+  debug: {
+    enabled: isDev,
+    sendHitTask: !isDev
+  }
 })
 
 export default Router

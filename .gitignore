@@ -1,6 +1,7 @@
 .quasar
 .DS_Store
 .thumbs.db
+/src/keys.js
 node_modules
 /dist
 /src-cordova/platforms
