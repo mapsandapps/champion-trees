@@ -47,7 +47,7 @@ export default {
   },
   mounted() {
     this.$q.loading.show({
-      message: 'Loading trees...',
+      message: 'Loading trees and your location...',
       spinner: 'QSpinnerRings',
       spinnerColor: 'primary',
       spinnerSize: 100
@@ -56,7 +56,7 @@ export default {
       this.fetchTreeData(),
       this.findUserLocation()
     ])
-    .then(() => { // FIXME: not working
+    .then(() => {
       this.$q.loading.hide();
     });
     const hideLoading = setInterval(() => {

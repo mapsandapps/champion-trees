@@ -33,27 +33,36 @@ const store = new Vuex.Store({
       commit('UPDATE_CHECKLIST')
     },
     fetchTreeData({ commit, dispatch }) {
-      tabletop = Tabletop.init({
-        key: 'https://docs.google.com/spreadsheets/d/1r0KzMrtXVKGkphr_XYU2Gi-7-0OfJ4tkOECAGrHHHlQ/edit?usp=sharing',
-        callback: function(data, tabletop) {
-          commit('SET_TREE_DATA');
-          dispatch('setTreeDistances');
-        }
+      return new Promise(resolve => {
+        tabletop = Tabletop.init({
+          key: 'https://docs.google.com/spreadsheets/d/1r0KzMrtXVKGkphr_XYU2Gi-7-0OfJ4tkOECAGrHHHlQ/edit?usp=sharing',
+          callback: function(data, tabletop) {
+            commit('SET_TREE_DATA');
+            dispatch('setTreeDistances');
+            resolve();
+          }
+        });
       });
     },
     findUserLocation({ commit, dispatch }) {
-      if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(position => {
-          commit('SET_GEOLOCATION_SUCCEEDED', true);
+      return new Promise((resolve, reject) => {
+        if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition(position => {
+            commit('SET_GEOLOCATION_SUCCEEDED', true);
+            commit('SET_GEOLOCATION_ATTEMPTED', true);
+            dispatch('setLocation', position.coords);
+            resolve();
+          }, error => {
+            console.log('Geolocation error');
+            commit('SET_GEOLOCATION_ATTEMPTED', true);
+            reject();
+          });
+        } else {
+          console.log('Error: no geolocation');
           commit('SET_GEOLOCATION_ATTEMPTED', true);
-          dispatch('setLocation', position.coords);
-        }, error => {
-          commit('SET_GEOLOCATION_ATTEMPTED', true);
-        });
-      } else {
-        console.log('Error: no geolocation');
-        commit('SET_GEOLOCATION_ATTEMPTED', true);
-      }
+          reject();
+        }
+      });
     },
     setLocation({ commit, dispatch }, coords) {
       dispatch('setTreeDistances');
