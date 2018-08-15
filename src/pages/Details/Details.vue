@@ -2,7 +2,7 @@
 <div v-if="tree" class="details-container">
   <div class="card details-card">
     <div class="details">
-      <div class="header">{{ tree['COMMON NAME'] }} in Atlanta</div>
+      <div class="header">{{ tree['COMMON NAME'] }}</div>
       <div class="subheader">{{ tree['LOCATION'] }}</div>
       <div class="distance">
         <q-icon name="place" />
