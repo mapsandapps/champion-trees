@@ -69,9 +69,11 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('trees', [
       'bearingFromUser',
-      'getTree',
+      'getTree'
+    ]),
+    ...mapGetters('user', [
       'treeSeen'
     ]),
     arrowDirection() {
@@ -100,7 +102,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions([
+    ...mapActions('user', [
       'checkTree',
       'uncheckTree'
     ]),

@@ -86,10 +86,12 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
-      'coordinates',
+    ...mapGetters('trees', [
       'getTree',
-      'trees',
+      'trees'
+    ]),
+    ...mapGetters('user', [
+      'coordinates',
       'treeSeen'
     ])
   },

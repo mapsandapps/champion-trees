@@ -44,10 +44,10 @@ export default {
     Map
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('trees', [
       'trees'
     ]),
-    ...mapState([
+    ...mapState('user', [
       'currentListingView',
       'geolocationSucceeded'
     ]),
@@ -72,7 +72,7 @@ export default {
     }
   },
   methods: {
-    ...mapMutations({
+    ...mapMutations('user', {
       setCurrentListingView: 'SET_CURRENT_LISTING_VIEW'
     }),
     openActionSheet() {

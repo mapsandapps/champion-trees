@@ -24,14 +24,18 @@ export default {
     }
   },
   computed: {
-    ...mapState([
-      'geolocationAttempted',
+    ...mapState('trees', [
       'treeDataLoaded'
+    ]),
+    ...mapState('user', [
+      'geolocationAttempted'
     ])
   },
   methods: {
-    ...mapActions([
-      'fetchTreeData',
+    ...mapActions('trees', [
+      'fetchTreeData'
+    ]),
+    ...mapActions('user', [
       'findUserLocation',
       'setLocation'
     ]),

@@ -79,7 +79,7 @@ export default {
     };
   },
   computed: {
-    ...mapGetters([
+    ...mapGetters('trees', [
       'getTree'
     ]),
     dbh() {
