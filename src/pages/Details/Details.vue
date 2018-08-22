@@ -33,7 +33,7 @@
         <div class="stat-caption">Largest of species in Atlanta</div>
       </div>
       <div>
-        <div class="stat">{{ tree.Points }}</div>
+        <div class="stat">{{ tree.points }}</div>
         <div class="stat-caption">Points</div>
       </div>
     </div>
@@ -44,7 +44,7 @@
       :dbh="dbh"
       :height="tree['HEIGHT(ft)']"
       :spread="tree['SPREAD (ft)']"
-      :points="tree['Points']" />
+      :points="tree.points" />
   </div>
 
   <q-card class="q-ma-sm kitchen-sink">
@@ -64,7 +64,7 @@ import keys from 'lodash/keys';
 import round from 'lodash/round';
 import { mapGetters } from 'vuex';
 
-import Diagram from 'components/diagram';
+import Diagram from 'components/Diagram';
 
 export default {
   name: 'Details',

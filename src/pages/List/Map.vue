@@ -81,14 +81,18 @@ export default {
   name: 'Map',
   data() {
     return {
+      markerGroup: null,
+      markers: [],
       selectedTreeData: null,
       userDot: null
     };
   },
   computed: {
+    ...mapGetters('filters', [
+      'filteredTrees'
+    ]),
     ...mapGetters('trees', [
-      'getTree',
-      'trees'
+      'getTree'
     ]),
     ...mapGetters('user', [
       'coordinates',
@@ -98,9 +102,65 @@ export default {
   watch: {
     coordinates() {
       this.updateUserDot();
+    },
+    filteredTrees() {
+      this.drawTrees();
     }
   },
   methods: {
+    drawTrees() {
+      if (this.markerGroup) {
+        // delete markers before redrawing
+        this.markerGroup.clearLayers();
+      }
+      this.markers = [];
+
+      this.filteredTrees.forEach(tree => {
+        let treeIcon = unrankedIcon;
+        if (this.treeSeen(tree.ID)) {
+          treeIcon = checkIcon;
+        } else if (tree.Rank == 1) {
+          treeIcon = goldIcon;
+        } else if (tree.Rank == 2) {
+          treeIcon = silverIcon;
+        } else if (tree.Rank == 3) {
+          treeIcon = bronzeIcon;
+        }
+        let marker = L.marker({
+          lat: tree.latitude,
+          lon: tree.longitude
+        },{
+          icon: treeIcon
+        })
+        .on('click', this.onClick);
+        marker.id = tree.ID;
+        this.markers.push(marker);
+      });
+
+      this.markerGroup = new L.featureGroup(this.markers);
+      this.markerGroup.addTo(this.map);
+      this.fitMapToUserAndNearestTree();
+    },
+    fitMapToUserAndNearestTree() {
+      const closestTree = minBy(this.filteredTrees, 'distance');
+      if (this.userDot && closestTree) {
+        this.map.fitBounds([
+          [
+            this.coordinates.latitude,
+            this.coordinates.longitude
+          ],
+          [
+            closestTree.latitude,
+            closestTree.longitude
+          ]
+        ],
+        {
+          maxZoom: 13
+        });
+      } else {
+        this.map.fitBounds(this.markerGroup.getBounds());
+      }
+    },
     navigateToDetails() {
       this.$router.push({
         name: 'Details',
@@ -116,22 +176,7 @@ export default {
         lat: this.coordinates.latitude,
         lon: this.coordinates.longitude
       }).addTo(this.map);
-      const closestTree = minBy(this.trees, 'distance');
-      if (closestTree) {
-        this.map.fitBounds([
-          [
-            this.coordinates.latitude,
-            this.coordinates.longitude
-          ],
-          [
-            closestTree.latitude,
-            closestTree.longitude
-          ]
-        ],
-        {
-          maxZoom: 13
-        });
-      }
+      this.fitMapToUserAndNearestTree();
     }
   },
   mounted() {
@@ -147,8 +192,6 @@ export default {
     this.map = new L.Map(this.$refs.map).setView([0, 0], 4)
     .on('click', () => this.selectedTreeData = null);
 
-    var markers = [];
-
     const baseMaps = {
       "Streets": streets,
       "Satellite": satellite
@@ -158,30 +201,7 @@ export default {
 
     streets.addTo(this.map);
 
-    this.trees.forEach(tree => {
-      let treeIcon = unrankedIcon;
-      if (this.treeSeen(tree.ID)) {
-        treeIcon = checkIcon;
-      } else if (tree.Rank == 1) {
-        treeIcon = goldIcon;
-      } else if (tree.Rank == 2) {
-        treeIcon = silverIcon;
-      } else if (tree.Rank == 3) {
-        treeIcon = bronzeIcon;
-      }
-      let marker = L.marker({
-        lat: tree.latitude,
-        lon: tree.longitude
-      },{
-        icon: treeIcon
-      })
-      .on('click', this.onClick).addTo(this.map);
-      marker.id = tree.ID;
-      markers.push(marker);
-    });
-
-    let markerGroup = new L.featureGroup(markers);
-    this.map.fitBounds(markerGroup.getBounds());
+    this.drawTrees();
 
     if (this.coordinates.latitude && this.coordinates.longitude) {
       this.updateUserDot();

@@ -3,6 +3,9 @@ import Vue from 'vue';
 
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
+import map from 'lodash/map';
+import sortBy from 'lodash/sortBy';
+import sortedUniq from 'lodash/sortedUniq';
 import bearing from '@turf/bearing';
 import distance from '@turf/distance';
 
@@ -67,6 +70,18 @@ export default {
     },
     trees: state => {
       return state.trees;
+    },
+    treeSpeciesList: state => {
+      if (state.trees.length < 1) return [];
+      return sortedUniq(sortBy(map(state.trees, 'SPECIES')));
+    },
+    treeTypeList: state => {
+      if (state.trees.length < 1) return [];
+      let types = [];
+      map(state.trees, tree => {
+        types.push(tree['COMMON NAME'].split(' ')[0]);
+      });
+      return sortedUniq(sortBy(types));
     }
   },
   mutations: {
@@ -75,6 +90,8 @@ export default {
       state.trees.forEach(tree => {
         tree.latitude = Number(tree.Latitude);
         tree.longitude = Number(tree.Longitude);
+        tree.points = Number(tree.Points);
+        delete tree.Points;
       });
       state.treeDataLoaded = true;
     }

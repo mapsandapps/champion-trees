@@ -2,8 +2,12 @@
 <div>
   <q-layout-header id="header">
     <q-toolbar
-      color="primary"
-    >
+      color="primary">
+      <q-btn flat round dense
+        v-if="treeDataLoaded"
+        icon="filter_list"
+        @click="left = !left" />
+
       <q-btn-toggle
         v-model="mode"
         toggle-color="blue"
@@ -16,6 +20,22 @@
         @click="openActionSheet" />
     </q-toolbar>
   </q-layout-header>
+  <q-layout-drawer
+    v-if="treeDataLoaded"
+    side="left"
+    v-model="left"
+    :breakpoint="760">
+    <filters />
+  </q-layout-drawer>
+
+  <q-alert
+    v-if="filtering"
+    color="secondary"
+    :actions="[{ label: 'Change', handler: () => { left = true } }]"
+    class="q-mb-sm">
+    Filters are currently applied
+  </q-alert>
+
   <div v-if="mode === 'list'" class="list" highlight separator>
     <q-item
       v-for="tree in sortedTrees"
@@ -24,6 +44,7 @@
       <Item :tree="tree" />
     </q-item>
   </div>
+
   <Map v-else />
 </div>
 </template>
@@ -34,18 +55,31 @@ import { mapGetters, mapMutations, mapState } from 'vuex';
 
 import orderBy from 'lodash/orderBy';
 
+import Filters from 'components/Filters';
 import Item from './Item';
 import Map from './Map';
 
 export default {
   name: 'Listing',
   components: {
+    Filters,
     Item,
     Map
   },
+  data() {
+    return {
+      left: false
+    }
+  },
   computed: {
-    ...mapGetters('trees', [
-      'trees'
+    ...mapGetters('filters', [
+      'filteredTrees'
+    ]),
+    ...mapState('filters', [
+      'filtering'
+    ]),
+    ...mapState('trees', [
+      'treeDataLoaded'
     ]),
     ...mapState('user', [
       'currentListingView',
@@ -65,9 +99,9 @@ export default {
     },
     sortedTrees() {
       if (this.geolocationSucceeded) {
-        return orderBy(this.trees, ['distance'], ['asc']);
+        return orderBy(this.filteredTrees, ['distance'], ['asc']);
       } else {
-        return this.trees;
+        return this.filteredTrees;
       }
     }
   },
