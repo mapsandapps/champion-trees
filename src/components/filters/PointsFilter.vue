@@ -12,7 +12,7 @@
 
 <script>
 import throttle from 'lodash/throttle';
-import { mapActions, mapGetters } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 export default {
   name: 'PointsFilter',
@@ -29,12 +29,15 @@ export default {
       'trees',
       'treeSpeciesList',
       'treeTypeList'
+    ]),
+    ...mapState('filters', [
+      'filtering'
     ])
   },
   watch: {
     filtering() {
       // reset the range when the filters are reset
-      if (!filtering) {
+      if (!this.filtering) {
         this.pointsRange = {
           min: 0,
           max: 400
