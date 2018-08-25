@@ -1,9 +1,11 @@
 import Tabletop from 'tabletop';
 import Vue from 'vue';
 
+import ceil from 'lodash/ceil';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
 import map from 'lodash/map';
+import maxBy from 'lodash/maxBy';
 import sortBy from 'lodash/sortBy';
 import sortedUniq from 'lodash/sortedUniq';
 import bearing from '@turf/bearing';
@@ -50,8 +52,10 @@ export default {
       );
     },
     getTree: state => id => {
-      const idInt = parseInt(id);
       return find(state.trees, ['ID', id]);
+    },
+    maxPoints: state => {
+      return ceil(maxBy(state.trees, 'points').points);
     },
     treeDistance: (state, getters, rootState, rootGetters) => id => {
       const coordinates = rootGetters['user/coordinates'];

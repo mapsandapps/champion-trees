@@ -4,7 +4,7 @@
   <q-range
     v-model="pointsRange"
     :min="0"
-    :max="400"
+    :max="maxPoints || 400"
     label-always
     @input="changeRange()" />
 </div>
@@ -26,6 +26,7 @@ export default {
   },
   computed: {
     ...mapGetters('trees', [
+      'maxPoints',
       'trees',
       'treeSpeciesList',
       'treeTypeList'
@@ -40,7 +41,7 @@ export default {
       if (!this.filtering) {
         this.pointsRange = {
           min: 0,
-          max: 400
+          max: this.maxPoints || 400
         }
       }
     }
@@ -52,6 +53,9 @@ export default {
     changeRange: throttle(function() {
       this.filterPoints(this.pointsRange);
     }, 500)
+  },
+  mounted() {
+    this.pointsRange.max = this.maxPoints;
   }
 };
 </script>
