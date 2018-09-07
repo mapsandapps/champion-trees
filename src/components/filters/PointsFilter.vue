@@ -12,7 +12,7 @@
 
 <script>
 import throttle from 'lodash/throttle';
-import { mapActions, mapGetters, mapState } from 'vuex';
+import { mapActions, mapGetters } from 'vuex';
 
 export default {
   name: 'PointsFilter',
@@ -31,7 +31,7 @@ export default {
       'treeSpeciesList',
       'treeTypeList'
     ]),
-    ...mapState('filters', [
+    ...mapGetters('filters', [
       'filtering'
     ])
   },

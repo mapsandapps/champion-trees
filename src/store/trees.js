@@ -83,7 +83,7 @@ export default {
       if (state.trees.length < 1) return [];
       let types = [];
       map(state.trees, tree => {
-        types.push(tree['COMMON NAME'].split(' ')[0]);
+        types.push(tree['COMMON NAME'].split(' -')[0]);
       });
       return sortedUniq(sortBy(types));
     }

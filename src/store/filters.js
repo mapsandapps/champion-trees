@@ -5,40 +5,47 @@ import filter from 'lodash/filter';
 export default {
   namespaced: true,
   state: {
-    filtering: false,
-    filters: {}
+    pointsFilter: null
   },
   getters: {
     filteredTrees: (state, getters, rootState, rootGetters) => {
       let trees = rootGetters['trees/trees'];
-      if (!state.filtering) {
+      if (!getters.filtering) {
         return trees;
       } else {
-        if (state.filters.points) {
+        if (state.pointsFilter) {
           trees = filter(trees, tree => {
-            return tree.points >= state.filters.points.min && tree.points <= state.filters.points.max;
+            return tree.points >= state.pointsFilter.min && tree.points <= state.pointsFilter.max;
           });
         }
         return trees;
       }
+    },
+    filtering: state => {
+      let isFiltering = false;
+      if (state.pointsFilter) {
+        isFiltering = true;
+      }
+      return isFiltering;
+    },
+    pointsFilter: state => {
+      return state.pointsFilter;
     }
   },
   actions: {
     filterPoints({ commit }, value) {
-      commit('SET_FILTER', { filter: 'points', value });
+      commit('SET_POINTS_FILTER', value);
     },
     resetFilters({ commit }) {
-      commit('SET_FILTERING' , false);
+      commit('RESET_FILTERS' , false);
     }
   },
   mutations: {
-    SET_FILTERING(state, value) {
-      state.filtering = value;
+    RESET_FILTERS(state) {
+      state.pointsFilter = null;
     },
-    SET_FILTER(state, payload) {
-      const { filter, value } = payload;
-      Vue.set(state.filters, filter, value);
-      state.filtering = true;
+    SET_POINTS_FILTER(state, value) {
+      state.pointsFilter = value;
     }
   }
 };

@@ -73,9 +73,7 @@ export default {
   },
   computed: {
     ...mapGetters('filters', [
-      'filteredTrees'
-    ]),
-    ...mapState('filters', [
+      'filteredTrees',
       'filtering'
     ]),
     ...mapState('trees', [
