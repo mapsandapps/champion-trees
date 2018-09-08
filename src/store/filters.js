@@ -9,6 +9,7 @@ export default {
      * when you create a new filter, be sure to update getters.filtering and actions.resetFilters
      */
     pointsFilter: null,
+    stateChampionFilter: false,
     typeFilter: null
   },
   getters: {
@@ -21,6 +22,11 @@ export default {
           trees = filter(trees, tree => {
             return tree.points >= state.pointsFilter.min && tree.points <= state.pointsFilter.max;
           });
+        }
+        if (getters.stateChampionFilterActive) {
+          trees = filter(trees, tree => {
+            return Boolean(tree['State Champion'].toLowerCase() === 'yes')
+          })
         }
         if (getters.typeFilterActive) {
           trees = filter(trees, tree => {
@@ -35,6 +41,7 @@ export default {
     },
     filtering: (state, getters) => {
       if (getters.pointsFilterActive ||
+        getters.stateChampionFilterActive ||
         getters.typeFilterActive) {
         return true;
       }
@@ -45,6 +52,12 @@ export default {
     },
     pointsFilterActive: state => {
       return Boolean(state.pointsFilter);
+    },
+    stateChampionFilter: state => {
+      return state.stateChampionFilter;
+    },
+    stateChampionFilterActive: state => {
+      return state.stateChampionFilter;
     },
     typeFilter: (state, getters, rootState, rootGetters) => {
       if (state.typeFilter) {
@@ -61,17 +74,24 @@ export default {
     filterPoints({ commit }, value) {
       commit('SET_POINTS_FILTER', value);
     },
+    filterStateChampion({ commit }, value) {
+      commit('SET_STATE_CHAMPION_FILTER', value);
+    },
     filterTypes({ commit }, value) {
       commit('SET_TYPES_FILTER', value);
     },
     resetFilters({ commit, rootGetters }) {
       commit('SET_POINTS_FILTER', null);
+      commit('SET_STATE_CHAMPION_FILTER', false);
       commit('SET_TYPES_FILTER', cloneDeep(rootGetters['trees/treeTypeList']))
     }
   },
   mutations: {
     SET_POINTS_FILTER(state, value) {
       state.pointsFilter = value;
+    },
+    SET_STATE_CHAMPION_FILTER(state, value) {
+      state.stateChampionFilter = value;
     },
     SET_TYPES_FILTER(state, value) {
       state.typeFilter = value.sort();

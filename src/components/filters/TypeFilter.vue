@@ -37,10 +37,6 @@ import map from 'lodash/map';
 
 export default {
   name: 'TypeFilter',
-  components: {
-  },
-  props: {
-  },
   data() {
     return {
       treeTypesSelected: []
@@ -59,7 +55,7 @@ export default {
   },
   watch: {
     filtering() {
-      // reset the range when the filters are reset
+      // reset when the filters are reset
       if (!this.filtering) {
         this.treeTypesSelected = cloneDeep(this.treeTypeList);
       }
