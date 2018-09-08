@@ -1,6 +1,5 @@
 <template>
 <div>
-  Points
   <q-range
     v-model="pointsRange"
     :min="0"

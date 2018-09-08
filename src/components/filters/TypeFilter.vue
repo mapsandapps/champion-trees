@@ -1,6 +1,19 @@
 <template>
 <div class="type-filter">
-  Tree species
+  <div class="q-my-md">
+    <q-btn
+      flat
+      color="secondary"
+      @click="showAllTypes">
+      Check all
+    </q-btn>
+    <q-btn
+      flat
+      color="secondary"
+      @click="showNoTypes">
+      Uncheck all
+    </q-btn>
+  </div>
   <div
     v-for="type in treeTypeList"
     class="option"
@@ -53,9 +66,14 @@ export default {
     ...mapActions('filters', [
       'filterTypes'
     ]),
-    ...mapMutations('user', [
-      'SET_FILTER'
-    ]),
+    showAllTypes() {
+      this.filterTypes(cloneDeep(this.treeTypeList));
+      this.treeTypesSelected = cloneDeep(this.treeTypeList);
+    },
+    showNoTypes() {
+      this.filterTypes([]);
+      this.treeTypesSelected = [];
+    },
     toggleCheckbox(types) {
       let arrayOfTypes = cloneDeep(types);
       delete arrayOfTypes[arrayOfTypes.length];

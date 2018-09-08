@@ -1,15 +1,17 @@
 <template>
 <div class="q-px-lg">
-  <h4>Filters</h4>
+  <h3>Filters</h3>
   <div class="text-faded">
     Currently showing {{ filteredTreesCount() }} of {{ treesCount() }} trees
   </div>
   <q-btn
-    class="q-mb-lg"
+    class="q-my-lg"
     @click="resetFilters()">
     Reset filters
   </q-btn>
+  <div class="header">Points</div>
   <points-filter class="q-mb-lg" />
+  <div class="header">Tree species</div>
   <type-filter class="q-mb-lg" />
 </div>
 </template>
@@ -42,4 +44,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.header {
+  font-size: 20px;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
 </style>
