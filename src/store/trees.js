@@ -27,6 +27,7 @@ export default {
           callback: function(data, tabletop) {
             commit('SET_TREE_DATA');
             dispatch('setTreeDistances');
+            dispatch('filters/resetFilters', null, { root: true });
             resolve();
           }
         });

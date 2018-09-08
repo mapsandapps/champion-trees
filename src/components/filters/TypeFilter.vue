@@ -30,7 +30,7 @@
 </template>
 
 <script>
-import { mapActions, mapGetters, mapMutations } from 'vuex';
+import { mapActions, mapGetters, mapState } from 'vuex';
 
 import cloneDeep from 'lodash/cloneDeep';
 import map from 'lodash/map';
@@ -52,6 +52,9 @@ export default {
     ]),
     ...mapGetters('trees', [
       'treeTypeList'
+    ]),
+    ...mapState('filters', [
+      'typeFilter'
     ])
   },
   watch: {
@@ -81,7 +84,7 @@ export default {
     }
   },
   mounted() {
-    this.treeTypesSelected = cloneDeep(this.treeTypeList);
+    this.treeTypesSelected = this.typeFilter;
   }
 };
 </script>
