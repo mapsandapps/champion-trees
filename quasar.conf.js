@@ -50,6 +50,7 @@ module.exports = function (ctx) {
         'QCard',
         'QCardMain',
         'QCardTitle',
+        'QCheckbox',
         'QIcon',
         'QInnerLoading',
         'QItem',

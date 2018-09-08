@@ -75,6 +75,9 @@ export default {
     trees: state => {
       return state.trees;
     },
+    treesCount: state => {
+      return state.trees.length;
+    },
     treeSpeciesList: state => {
       if (state.trees.length < 1) return [];
       return sortedUniq(sortBy(map(state.trees, 'SPECIES')));
@@ -83,7 +86,9 @@ export default {
       if (state.trees.length < 1) return [];
       let types = [];
       map(state.trees, tree => {
-        types.push(tree['COMMON NAME'].split(' -')[0]);
+        const type = tree['COMMON NAME'].split(' -')[0];
+        tree.type = type;
+        types.push(type);
       });
       return sortedUniq(sortBy(types));
     }

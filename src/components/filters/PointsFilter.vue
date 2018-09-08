@@ -25,14 +25,14 @@ export default {
     };
   },
   computed: {
+    ...mapGetters('filters', [
+      'filtering'
+    ]),
     ...mapGetters('trees', [
       'maxPoints',
       'trees',
       'treeSpeciesList',
       'treeTypeList'
-    ]),
-    ...mapGetters('filters', [
-      'filtering'
     ])
   },
   watch: {
