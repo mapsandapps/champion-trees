@@ -23,9 +23,7 @@ export default {
   },
   computed: {
     ...mapGetters('filters', [
-      'filtering'
-    ]),
-    ...mapGetters('filters', [
+      'filtering',
       'stateChampionFilter'
     ])
   },

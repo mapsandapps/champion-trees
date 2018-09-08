@@ -9,10 +9,16 @@
     @click="resetFilters()">
     Reset filters
   </q-btn>
+
+  <div class="header">Search</div>
+  <search class="q-mb-lg" />
+
   <div class="header">State champion</div>
   <state-champion-filter class="q-mb-lg" />
+
   <div class="header">Points</div>
   <points-filter class="q-mb-lg" />
+
   <div class="header">Tree species</div>
   <type-filter class="q-mb-lg" />
 </div>
@@ -22,6 +28,7 @@
 import { mapActions, mapGetters } from 'vuex';
 
 import PointsFilter from 'components/filters/PointsFilter';
+import Search from 'components/filters/Search';
 import StateChampionFilter from 'components/filters/StateChampionFilter';
 import TypeFilter from 'components/filters/TypeFilter';
 
@@ -29,6 +36,7 @@ export default {
   name: 'filters',
   components: {
     PointsFilter,
+    Search,
     StateChampionFilter,
     TypeFilter
   },

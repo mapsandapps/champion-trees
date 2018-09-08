@@ -61,6 +61,7 @@ module.exports = function (ctx) {
         'QPage',
         'QPageContainer',
         'QRange',
+        'QSearch',
         'QSpinnerRings',
         'QToggle',
         'QToolbar',

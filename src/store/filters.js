@@ -9,6 +9,7 @@ export default {
      * when you create a new filter, be sure to update getters.filtering and actions.resetFilters
      */
     pointsFilter: null,
+    searchTerm: null,
     stateChampionFilter: false,
     typeFilter: null
   },
@@ -21,6 +22,11 @@ export default {
         if (getters.pointsFilterActive) {
           trees = filter(trees, tree => {
             return tree.points >= state.pointsFilter.min && tree.points <= state.pointsFilter.max;
+          });
+        }
+        if (getters.searchTerm) {
+          trees = filter(trees, tree => {
+            return includes(JSON.stringify(tree).toLowerCase(), state.searchTerm);
           });
         }
         if (getters.stateChampionFilterActive) {
@@ -41,6 +47,7 @@ export default {
     },
     filtering: (state, getters) => {
       if (getters.pointsFilterActive ||
+        getters.searchActive ||
         getters.stateChampionFilterActive ||
         getters.typeFilterActive) {
         return true;
@@ -52,6 +59,12 @@ export default {
     },
     pointsFilterActive: state => {
       return Boolean(state.pointsFilter);
+    },
+    searchTerm: state => {
+      return state.searchTerm;
+    },
+    searchActive: state => {
+      return Boolean(state.searchTerm);
     },
     stateChampionFilter: state => {
       return state.stateChampionFilter;
@@ -82,13 +95,20 @@ export default {
     },
     resetFilters({ commit, rootGetters }) {
       commit('SET_POINTS_FILTER', null);
+      commit('SET_SEARCH', null);
       commit('SET_STATE_CHAMPION_FILTER', false);
       commit('SET_TYPES_FILTER', cloneDeep(rootGetters['trees/treeTypeList']))
+    },
+    search({ commit }, value) {
+      commit('SET_SEARCH', value);
     }
   },
   mutations: {
     SET_POINTS_FILTER(state, value) {
       state.pointsFilter = value;
+    },
+    SET_SEARCH(state, value) {
+      state.searchTerm = value;
     },
     SET_STATE_CHAMPION_FILTER(state, value) {
       state.stateChampionFilter = value;
