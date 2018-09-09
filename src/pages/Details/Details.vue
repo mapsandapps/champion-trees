@@ -47,6 +47,50 @@
       :points="tree.points" />
   </div>
 
+  <div class="card">
+    <div class="header q-mb-md">Points</div>
+    <q-list>
+      <q-item>
+        <q-item-side icon="adjust" color="primary" />
+        <!-- TODO: could change to font awesome "bullseye" -->
+        <q-item-main>
+          Trunk
+        </q-item-main>
+        <q-item-side right color="black">
+          {{ tree['CIR (in)'] }}
+        </q-item-side>
+      </q-item>
+      <q-item>
+        <q-item-side icon="import_export" color="primary" />
+        <q-item-main>
+          Height
+        </q-item-main>
+        <q-item-side right color="black">
+          {{ tree['HEIGHT(ft)'] }}
+        </q-item-side>
+      </q-item>
+      <q-item>
+        <q-item-side icon="zoom_out_map" color="primary" />
+        <q-item-main>
+          Crown spread
+        </q-item-main>
+        <q-item-side right color="black">
+          {{ spread }}
+        </q-item-side>
+      </q-item>
+      <q-item-separator />
+      <q-item>
+        <q-item-side icon="import_export" color="primary" />
+        <q-item-main>
+          Total points
+        </q-item-main>
+        <q-item-side right color="black">
+          {{ tree.points }}
+        </q-item-side>
+      </q-item>
+    </q-list>
+  </div>
+
   <q-card class="q-ma-sm kitchen-sink">
     <q-card-title>Kitchen Sink</q-card-title>
     <q-card-main>
@@ -87,6 +131,9 @@ export default {
     },
     keys() {
       return keys(this.tree);
+    },
+    spread() {
+      return Number(this.tree['SPREAD (ft)'] / 4);
     }
   },
   methods: {
