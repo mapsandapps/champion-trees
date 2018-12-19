@@ -1,6 +1,8 @@
 import Tabletop from 'tabletop';
 import Vue from 'vue';
 
+import treeDataTemp from './treeData.js';
+
 import ceil from 'lodash/ceil';
 import find from 'lodash/find';
 import findIndex from 'lodash/findIndex';
@@ -22,16 +24,23 @@ export default {
   actions: {
     fetchTreeData({ commit, dispatch }) {
       return new Promise(resolve => {
-        tabletop = Tabletop.init({
-          key: 'https://docs.google.com/spreadsheets/d/1r0KzMrtXVKGkphr_XYU2Gi-7-0OfJ4tkOECAGrHHHlQ/edit?usp=sharing',
-          callback: function(data, tabletop) {
-            commit('SET_TREE_DATA');
-            dispatch('setTreeDistances');
-            dispatch('filters/resetFilters', null, { root: true });
-            resolve();
-          }
-        });
+        dispatch('setTreeData', treeDataTemp);
+        resolve();
       });
+      // return new Promise(resolve => {
+      //   tabletop = Tabletop.init({
+      //     key: 'https://docs.google.com/spreadsheets/d/1r0KzMrtXVKGkphr_XYU2Gi-7-0OfJ4tkOECAGrHHHlQ/edit?usp=sharing',
+      //     callback: function(data, tabletop) {
+      //       dispatch('setTreeData', tabletop.sheets('trees').elements);
+      //       resolve();
+      //     }
+      //   });
+      // });
+    },
+    setTreeData({ commit, dispatch }, payload) {
+      commit('SET_TREE_DATA', payload);
+      dispatch('setTreeDistances');
+      dispatch('filters/resetFilters', null, { root: true });
     },
     setTreeDistances({ state, getters }) {
       if (state.trees.length > 0) {
@@ -95,8 +104,8 @@ export default {
     }
   },
   mutations: {
-    SET_TREE_DATA(state) {
-      state.trees = tabletop.sheets('trees').elements;
+    SET_TREE_DATA(state, payload) {
+      state.trees = payload;
       state.trees.forEach(tree => {
         tree.latitude = Number(tree.Latitude);
         tree.longitude = Number(tree.Longitude);

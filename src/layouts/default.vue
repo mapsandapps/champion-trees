@@ -57,8 +57,8 @@ export default {
       spinnerSize: 100
     });
     Promise.all([
-      this.fetchTreeData(),
-      this.findUserLocation()
+      this.fetchTreeData() //,
+      // this.findUserLocation()
     ])
     .then(() => {
       this.$q.loading.hide();

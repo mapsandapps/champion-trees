@@ -23,3 +23,9 @@ quasar clean
 git worktree add dist/spa-mat gh-pages
 quasar build
 ```
+
+To run the tests:
+
+```
+yarn run cypress open
+```
