@@ -27,5 +27,6 @@ quasar build
 To run the tests:
 
 ```
+quasar dev
 yarn run cypress open
 ```

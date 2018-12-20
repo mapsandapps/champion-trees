@@ -9,7 +9,6 @@ describe('Listing page', () => {
 
   it('Displays filters when filters button is clicked', () => {
     cy.get('.filter-drawer-toggle').click()
-
     cy.get('.q-layout-drawer').should('be.visible')
   })
 
@@ -20,6 +19,12 @@ describe('Listing page', () => {
 
   it('Displays map in map mode', () => {
     cy.get('.q-btn-toggle').click()
+    cy.get('#map').should('be.visible')
+  })
+
+  it('Remembers list vs. map toggle state', () => {
+    cy.get('.q-btn-toggle').click()
+    cy.reload(true)
     cy.get('#map').should('be.visible')
   })
 })
