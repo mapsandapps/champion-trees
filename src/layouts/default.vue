@@ -57,11 +57,12 @@ export default {
       spinnerSize: 100
     });
     Promise.all([
-      this.fetchTreeData() //,
-      // this.findUserLocation()
+      this.fetchTreeData(),
+      this.findUserLocation()
     ])
     .then(() => {
       this.$q.loading.hide();
+      window.dataLoaded = true; // TODO: if (window.Cypress)
     });
     const hideLoading = setInterval(() => {
       // hide spinner eventually, just in case something bugs out
