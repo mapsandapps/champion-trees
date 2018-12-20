@@ -65,6 +65,12 @@ export default {
       if (window.Cypress) {
         window.dataLoaded = true;
       }
+    })
+    .catch(() => {
+      this.$q.loading.hide();
+      if (window.Cypress) {
+        window.dataLoaded = true;
+      }
     });
     const hideLoading = setInterval(() => {
       // hide spinner eventually, just in case something bugs out

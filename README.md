@@ -30,3 +30,9 @@ To run the tests:
 quasar dev
 yarn run cypress open
 ```
+
+To record and upload the tests:
+
+```
+cypress run --record --key <record-key>
+```

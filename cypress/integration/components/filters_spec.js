@@ -16,7 +16,7 @@ describe('Filters Component', () => {
   it('Filters on search input', () => {
     cy.get('.filter-drawer-toggle').click()
     cy.get('.q-search input').type('hickory')
-    cy.wait(100)
+    cy.wait(300)
     cy.get('.list').should('not.contain', 'Ironwood/Hornbeam')
   })
 
@@ -30,7 +30,7 @@ describe('Filters Component', () => {
     setTrees()
     cy.get('.filter-drawer-toggle').click()
     cy.get('.q-option').contains('Dogwood').click()
-    cy.wait(100)
+    cy.wait(300)
     cy.get('.list').should('not.contain', 'Dogwood')
   })
 
@@ -39,7 +39,7 @@ describe('Filters Component', () => {
     cy.get('.filter-drawer-toggle').click()
     cy.get('.q-search input').type('pignut')
     cy.get('.q-option').contains('Dogwood').click()
-    cy.wait(100)
+    cy.wait(300)
     cy.get('.list').should('not.contain', 'Dogwood')
     cy.get('.list').should('not.contain', 'Bitternut')
     cy.get('.list').should('contain', 'Pignut')
@@ -50,7 +50,7 @@ describe('Filters Component', () => {
     cy.get('.filter-drawer-toggle').click()
     cy.get('.q-search input').type('pignut')
     cy.get('.q-option').contains('Dogwood').click()
-    cy.wait(100)
+    cy.wait(300)
     cy.get('.q-btn').contains('Reset filters').click()
     cy.get('.list').should('contain', 'Dogwood')
     cy.get('.list').should('contain', 'Bitternut')
