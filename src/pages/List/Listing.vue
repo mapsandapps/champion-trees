@@ -5,6 +5,7 @@
       color="primary">
       <q-btn flat round dense
         v-if="treeDataLoaded"
+        class="filter-drawer-toggle"
         icon="filter_list"
         @click="left = !left" />
 
